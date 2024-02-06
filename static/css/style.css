@@ -1,29 +1,228 @@
 :root[bg-theme='light'] {
   --bg-color: white;
 }
-  
+
+:root[bg-theme='dark'] {
+  --bg-color: rgb(0, 0, 0);
+}
+
+:root[bg-theme='dark'] .message-text.request,
+:root[bg-theme='dark'] .message-text.response {
+  color: white;
+} 
+
 :root[bg-theme='gray'] {
   --bg-color: #42424670;
 }
 
-:root[bg-theme='light-red'] {
-  --bg-color: #eda8a8;
-}
-
-:root[bg-theme='light-blue'] {
+:root[bg-theme='blue'] {
   --bg-color: #55609a;
 }
 
-:root[bg-theme='light-purple'] {
+:root[bg-theme='purple'] {
   --bg-color: #c09ff9;
 }
 
-:root[bg-theme='light-green'] {
+:root[bg-theme='green'] {
   --bg-color: #91ecd1;
 }
 
-:root[bg-theme='light-yellow'] {
+:root[bg-theme='yellow'] {
   --bg-color: #e9e097;
+}
+
+:root[bg-theme='orange'] {
+  --bg-color: #ffa500;
+}
+
+:root[bg-theme='cyan'] {
+  --bg-color: #00ffff;
+}
+
+:root[bg-theme='pink'] {
+  --bg-color: #f8a7b8;
+}
+
+:root[bg-theme='teal'] {
+  --bg-color: #008080;
+}
+
+:root[bg-theme='silver'] {
+  --bg-color: #c0c0c0;
+}
+
+:root[bg-theme='light-pink'] {
+  --bg-color: #ffc0cb;
+}
+
+:root[bg-theme='light-blue'] {
+  --bg-color: #add8e6;
+}
+
+:root[bg-theme='light-green'] {
+  --bg-color: #90ee90;
+}
+
+:root[bg-theme='light-yellow'] {
+  --bg-color: #ffffe0;
+}
+
+:root[bg-theme='light-orange'] {
+  --bg-color: #ffdab9;
+}
+
+.foot {
+    color: green;
+}
+
+:root[bg-theme='dark'] .copy-button i,
+:root[bg-theme='dark'] .send-button i,
+:root[bg-theme='dark'] .edit-button i,
+:root[bg-theme='dark'] .delete-message-btn i {
+  color: white; /* 将按钮图标颜色设置为白色 */
+}
+
+:root[bg-theme='dark'] .copy-button:hover i,
+:root[bg-theme='dark'] .send-button:hover i,
+:root[bg-theme='dark'] .edit-button:hover i {
+  color: #90ee90; /* 悬停时将按钮图标颜色设置为绿色 */
+}
+
+:root[bg-theme='dark'] .delete-message-btn:hover i {
+  color: red; /* 悬停时将按钮图标颜色设置为红色 */
+}
+
+:root[bg-theme='gray'] .copy-button i,
+:root[bg-theme='gray'] .send-button i,
+:root[bg-theme='gray'] .edit-button i,
+:root[bg-theme='gray'] .delete-message-btn i {
+  color: black; /* 将按钮图标颜色设置为黑色 */
+}
+
+:root[bg-theme='gray'] .copy-button:hover i,
+:root[bg-theme='gray'] .send-button:hover i,
+:root[bg-theme='gray'] .edit-button:hover i {
+  color: blue; /* 悬停时将按钮图标颜色设置为蓝色 */
+}
+
+:root[bg-theme='gray'] .delete-message-btn:hover i {
+  color: red; /* 悬停时将按钮图标颜色设置为红色 */
+}
+
+/* 与主题颜色为 silver 时应用相同的设置 */
+:root[bg-theme='silver'] .copy-button i,
+:root[bg-theme='silver'] .send-button i,
+:root[bg-theme='silver'] .edit-button i,
+:root[bg-theme='silver'] .delete-message-btn i {
+  color: black;
+}
+
+:root[bg-theme='silver'] .copy-button:hover i,
+:root[bg-theme='silver'] .send-button:hover i,
+:root[bg-theme='silver'] .edit-button:hover i {
+  color: blue;
+}
+
+:root[bg-theme='silver'] .delete-message-btn:hover i {
+  color: red;
+}
+
+/* CSS 样式中为复制按钮设置图标 */
+.copy-button {
+  display: none; /* 默认隐藏复制按钮 */
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 4px; /* 设置左侧间距为 4px */
+  margin-right: 5.5px; /* 设置右侧间距为 5.5px */
+}
+
+.copy-button i {
+  color: #808080; /* 默认图标颜色为灰色 */
+  font-size: 14px; /* 图标大小 */
+}
+
+.message-text.request:hover .copy-button,
+.message-text.response:hover .copy-button {
+  display: inline-block; /* 鼠标悬停时显示复制按钮 */
+}
+
+/* 悬停时变色 */
+.copy-button:hover i {
+  color: #000000; /* 悬停时图标颜色变为黑色 */
+}
+
+/* CSS 样式中为发送按钮设置图标 */
+.send-button {
+  display: none; /* 默认隐藏发送按钮 */
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 5.5px; /* 设置左侧间距为 5.5px */
+  margin-right: 5.5px; /* 设置右侧间距为 5.5px */
+}
+
+.send-button i {
+  color: #808080; /* 默认图标颜色为灰色 */
+  font-size: 14px; /* 图标大小 */
+}
+
+.message-text.request:hover .send-button,
+.message-text.response:hover .send-button {
+  display: inline-block; /* 鼠标悬停时显示发送按钮 */
+}
+
+/* 悬停时变色 */
+.send-button:hover i {
+  color: #000000; /* 悬停时图标颜色变为黑色 */
+}
+
+/* CSS 样式中为编辑按钮设置图标 */
+.edit-button {
+  display: none; /* 默认隐藏编辑按钮 */
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 5.5px; /* 设置左侧间距为 5.5px */
+  margin-right: 5.5px; /* 设置右侧间距为 5.5px */
+}
+
+.edit-button i {
+  color: #808080; /* 默认图标颜色为灰色 */
+  font-size: 14px; /* 图标大小 */
+}
+
+.message-text.request:hover .edit-button,
+.message-text.response:hover .edit-button {
+  display: inline-block; /* 鼠标悬停时显示编辑按钮 */
+}
+
+/* 悬停时变色 */
+.edit-button:hover i {
+  color: #000000; /* 悬停时图标颜色变为黑色 */
+}
+
+.delete-message-btn {
+  display: none; /* 默认隐藏删除按钮 */
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 5.5px; /* 设置左侧间距为 5.5px */
+}
+
+.delete-message-btn i {
+  color: #808080; /* 默认图标颜色为灰色 */
+  font-size: 14px; /* 图标大小 */
+}
+
+.message-text.request:hover .delete-message-btn,
+.message-text.response:hover .delete-message-btn {
+  display: inline-block; /* 鼠标悬停时显示删除按钮 */
+}
+
+/* 悬停时变色 */
+.delete-message-btn:hover i {
+  color: red; /* 悬停时图标颜色变为红色 */
 }
 
 body {
@@ -326,11 +525,19 @@ input[type="checkbox"]:checked + .check-trail .check-handler::before {
   border-bottom: 1px dashed #e7eaec;
 }
 
-.message-bubble .message-text{
+.message-bubble .message-text.response{
   width: auto;
   max-width: calc(100% - 45px);
   font-size: 18px;
-  margin-left:15px;
+  margin-left:10px;
+  word-break: break-all;
+}
+
+.message-bubble .message-text.request{
+  width: auto;
+  max-width: calc(100% - 45px);
+  font-size: 18px;
+  margin-left:10px;
   word-break: break-all;
 }
 
@@ -397,3 +604,53 @@ input[type="checkbox"]:checked + .check-trail .check-handler::before {
   color:#1ab394;
   text-decoration:none;
 }
+/* 移动设置按钮到输入框左侧 */
+.answer .ipt {
+    position: relative;
+}
+
+.answer .others .common.settings {
+    position: absolute;
+    top: 85%;
+    transform: translateY(-50%);
+    left: -15px; /* 调整左侧距离 */
+    z-index: 1; /* 将设置按钮置于输入框上层 */
+}
+
+
+.answer .others .common.settings .dropup {
+    left: auto;
+    right: ;
+}
+
+    .settings-common {
+        display: flex;
+        align-items: center;
+     
+    }
+
+    .temperature, .max-tokens {
+        flex: 1.5;
+        margin-left: 10px; /* 间隙大小 */
+        margin-right: 5px; /* 间隙大小 */
+    }
+
+    .temperature-input, .max-tokens-input {
+        flex: 1;
+    }
+
+    .temperature-display {
+        margin-left: 10px; /* 输入框和显示数字之间的间隙 */
+    }
+    .max-tokens-display {
+        margin-left: 5px; /* 输入框和显示数字之间的间隙 */
+    }
+    .lead.text-center {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .lead.text-center a {
+        margin: 5.5px;
+    }
