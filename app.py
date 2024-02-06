@@ -3,11 +3,12 @@ from flask import Flask, request, jsonify, render_template, Response
 import requests
 import json
 import os
-
+import random
 app = Flask(__name__)
 
 # 从配置文件中settings加载配置
 app.config.from_pyfile('settings.py')
+
 
 @app.route("/", methods=["GET"])
 def index():
@@ -17,12 +18,23 @@ def index():
 def chat():
     messages = request.form.get("prompts", None)
     apiKey = request.form.get("apiKey", None)
-    model = request.form.get("model", "gpt-3.5-turbo")
+    model = request.form.get("model", "gpt-3.5-turbo-0125")
+    temperature = request.form.get("temperature",0.5)
+    max_tokens =  request.form.get("max_tokens",4000)
+# 获取用户输入的API URL
+    api_url = request.form.get("api_url", None)
+
+    # 如果用户没有输入API URL，则使用配置文件中的默认值
+    if api_url is None:
+        api_url = app.config.get("API_URL", None)
+
     if messages is None:
         return jsonify({"error": {"message": "请输入prompts！", "type": "invalid_request_error", "code": ""}})
 
     if apiKey is None:
-        apiKey = os.environ.get('OPENAI_API_KEY',app.config["OPENAI_API_KEY"])
+        api_keys = app.config.get("API_KEYS", [])
+        apiKey = os.environ.get('OPENAI_API_KEY', random.choice(api_keys))
+
 
     headers = {
         "Content-Type": "application/json",
@@ -35,8 +47,8 @@ def chat():
     data = {
         "messages": prompts,
         "model": model,
-        "max_tokens": 1024,
-        "temperature": 0.5,
+        "max_tokens": int(max_tokens),
+        "temperature": float(temperature),
         "top_p": 1,
         "n": 1,
         "stream": True,
@@ -44,11 +56,11 @@ def chat():
 
     try:
         resp = requests.post(
-            url=app.config["URL"],
+            url=api_url+ "/v1/chat/completions",
             headers=headers,
             json=data,
             stream=True,
-            timeout=(10, 10)  # 连接超时时间为10秒，读取超时时间为10秒
+	    timeout=(60, 60)  # 连接超时时间为60秒，读取超时时间为60秒
         )
     except requests.exceptions.Timeout:
         return jsonify({"error": {"message": "请求超时，请稍后再试！", "type": "timeout_error", "code": ""}})
@@ -81,4 +93,4 @@ def chat():
     return Response(generate(), content_type='application/octet-stream')
 
 if __name__ == '__main__':
-    app.run(port=5000)
+    app.run('0.0.0.0', 80)
