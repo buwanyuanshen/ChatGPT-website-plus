@@ -1,3 +1,59 @@
+// 获取输入框元素和外部容器
+var chatInput = document.getElementById('chatInput');
+var iptContainer = document.querySelector('.ipt');
+
+// 设置输入框的最大高度为250px
+var maxHeight = 250;
+
+// 获取发送按钮元素
+var chatBtn = document.getElementById('chatBtn');
+
+// 获取删除按钮元素
+var deleteBtn = document.getElementById('deleteBtn');
+
+// 监听输入框内容变化
+chatInput.addEventListener('input', function () {
+    // 保存当前输入框的滚动高度
+    var currentScrollHeight = chatInput.scrollHeight;
+
+    // 使输入框高度自动适应内容
+    chatInput.style.height = 'auto';
+    chatInput.style.height = (Math.min(maxHeight, chatInput.scrollHeight)) + 'px';
+
+    // 计算输入框的新高度
+    var newHeight = Math.min(maxHeight, chatInput.scrollHeight);
+
+    // 设置外部容器的高度
+    iptContainer.style.height = (newHeight + 20) + 'px'; // 增加20px的额外空间
+
+    // 恢复滚动高度，避免闪烁
+    chatInput.scrollTop = currentScrollHeight;
+});
+
+// 监听发送按钮点击事件
+chatBtn.addEventListener('click', function () {
+    // 设置输入框的初始高度
+    chatInput.style.height = '32px';
+    iptContainer.style.height = '50px'; // 将外部容器的高度也设置为初始值
+});
+
+// 监听删除按钮点击事件
+deleteBtn.addEventListener('click', function () {
+    // 设置输入框的初始高度
+    chatInput.style.height = '32px';
+    iptContainer.style.height = '50px'; // 将外部容器的高度也设置为初始值
+});
+
+// 监听回车键按下事件
+chatInput.addEventListener('keydown', function (event) {
+    if (event.keyCode === 13) { // 判断是否按下回车键
+        // 设置输入框的初始高度
+        chatInput.style.height = '32px';
+        iptContainer.style.height = '50px'; // 将外部容器的高度也设置为初始值
+    }
+});
+
+
 // 功能
 $(document).ready(function() {
   var chatBtn = $('#chatBtn');
@@ -33,50 +89,280 @@ $(document).ready(function() {
     div.appendChild(text);
     return div.innerHTML;
   }
+// 监听 temperature 变化
+$('.settings-common .temperature').on('input', function() {
+    const temperatureValue = $(this).val();
+    $('.settings-common .temperature-display').text(temperatureValue);
+    $('.settings-common .temperature-input').val(temperatureValue);
+});
 
+// 监听 temperature 输入框变化
+$('.settings-common .temperature-input').on('input', function() {
+    let temperatureValue = $(this).val();
+    const minTemperature = parseFloat($('.settings-common .temperature-input').attr('min'));
+    const maxTemperature = parseFloat($('.settings-common .temperature-input').attr('max'));
+
+    // 限制最多只能输入两个数字
+    const regex = /^(\d{0,2}(\.\d{0,1})?)?$/;
+    if (!regex.test(temperatureValue)) {
+    temperatureValue = parseFloat(temperatureValue).toFixed(1);
+        $(this).val(temperatureValue);
+    } else {
+        // 处理以0开头后面直接跟数字的情况，如01
+        if (temperatureValue.startsWith('0') && temperatureValue.length > 1 && temperatureValue[1] !== '.') {
+            temperatureValue = parseFloat(temperatureValue); // 将字符串转换为数字
+            $(this).val(temperatureValue); // 更新输入框的值
+        }
+        // 将字符串转换为数字
+        temperatureValue = parseFloat(temperatureValue);
+        if (isNaN(temperatureValue) || temperatureValue < minTemperature) {
+            temperatureValue = minTemperature;
+            $(this).val(minTemperature);
+        } else if (temperatureValue > maxTemperature) {
+            temperatureValue = maxTemperature;
+            $(this).val(maxTemperature);
+        }
+    }
+    $('.settings-common .temperature-display').text(temperatureValue);
+    $('.settings-common .temperature').val(temperatureValue);
+});
+
+
+// 监听 max_tokens 变化
+$('.settings-common .max-tokens').on('input', function() {
+    const maxTokensValue = $(this).val();
+    $('.settings-common .max-tokens-display').text(maxTokensValue);
+    $('.settings-common .max-tokens-input').val(maxTokensValue);
+});
+
+// 监听 max_tokens 输入框键盘按下事件
+$('.settings-common .max-tokens-input').on('keypress', function(event) {
+const maxTokensValue = $(this).val();
+    // 获取按下的键码
+    const keyCode = event.which || event.keyCode;
+    // 获取当前输入框的值
+    const inputValue = $(this).val();
+    // 如果按下的键是小数点，并且当前输入框的值已经包含小数点，则阻止默认行为
+    if (keyCode === 46 ) {
+        event.preventDefault();
+    }
+});
+
+// 监听 max_tokens 输入框变化
+$('.settings-common .max-tokens-input').on('input', function() {
+    let maxTokensValue = parseInt($(this).val());
+    const minTokens = parseInt($('.settings-common .max-tokens-input').attr('min'));
+    const maxTokens = parseInt($('.settings-common .max-tokens-input').attr('max'));
+
+    if (isNaN(maxTokensValue) || maxTokensValue < minTokens) {
+        maxTokensValue = minTokens;
+        $(this).val(minTokens);
+    } else if (maxTokensValue > maxTokens) {
+        maxTokensValue = maxTokens;
+        $(this).val(maxTokens);
+    }
+
+    $('.settings-common .max-tokens-display').text(maxTokensValue);
+    $('.settings-common .max-tokens').val(maxTokensValue);
+});
+
+
+// 添加请求消息到窗口
+function addRequestMessage(message) {
+  $(".answer .tips").css({"display":"none"});    // 打赏卡隐藏
+  chatInput.val('');
+  let escapedMessage = escapeHtml(message);  // 对请求message进行转义，防止输入的是html而被浏览器渲染
+  let requestMessageElement = $('<div class="message-bubble"><span class="chat-icon request-icon"></span><div class="message-text request"><p>' + escapedMessage + '</p><button class="copy-button"><i class="far fa-copy"></i></button><button class="edit-button"><i class="fas fa-edit"></i></button><button class="send-button"><i class="fa fa-rotate-left"></i></button><button class="delete-message-btn"><i class="far fa-trash-alt"></i></button></div></div>');
+  chatWindow.append(requestMessageElement);
+
+  // 添加复制按钮点击事件
+  requestMessageElement.find('.copy-button').click(function() {
+    copyMessage($(this)); // 调用复制消息函数
+  });
+
+  let responseMessageElement = $('<div class="message-bubble"><span class="chat-icon response-icon"></span><div class="message-text response"><span class="loading-icon"><i class="fa fa-spinner fa-pulse fa-2x"></i></span></div></div>');
+  chatWindow.append(responseMessageElement);
+  chatWindow.scrollTop(chatWindow.prop('scrollHeight'));
   
-  // 添加请求消息到窗口
-  function addRequestMessage(message) {
-    $(".answer .tips").css({"display":"none"});    // 打赏卡隐藏
-    chatInput.val('');
-    let escapedMessage = escapeHtml(message);  // 对请求message进行转义，防止输入的是html而被浏览器渲染
-    let requestMessageElement = $('<div class="message-bubble"><span class="chat-icon request-icon"></span><div class="message-text request"><p>' +  escapedMessage + '</p></div></div>');
-    chatWindow.append(requestMessageElement);
-    let responseMessageElement = $('<div class="message-bubble"><span class="chat-icon response-icon"></span><div class="message-text response"><span class="loading-icon"><i class="fa fa-spinner fa-pulse fa-2x"></i></span></div></div>');
-    chatWindow.append(responseMessageElement);
-    chatWindow.scrollTop(chatWindow.prop('scrollHeight'));
+  // 绑定发送按钮点击事件
+  requestMessageElement.find('.send-button').click(function() {
+    resendMessage(message);
+  });
+  
+  // 绑定编辑按钮点击事件
+  requestMessageElement.find('.edit-button').click(function() {
+    editMessage(message);
+  });
+
+  // 添加删除按钮点击事件
+  requestMessageElement.find('.delete-message-btn').click(function() {
+    $(this).closest('.message-bubble').remove(); // 删除该条请求消息
+  });
+}
+
+// 编辑消息
+function editMessage(message) {
+  // 清除该条请求消息和回复消息
+  $('.message-bubble').last().prev().remove();
+  $('.message-bubble').last().remove();
+  
+  // 将请求消息粘贴到用户输入框
+  chatInput.val(message);
+}
+
+// 重新发送消息
+function resendMessage(message) {
+  // 获取随机的 API key
+  const apiKey = getRandomApiKey();
+
+  // 创建数据对象，与原始发送消息时的数据相同
+  let data = {};
+  data.model = $(".settings-common .model").val();
+  data.temperature = parseFloat($(".settings-common .temperature").val());
+  data.max_tokens = parseInt($(".settings-common .max-tokens").val());
+
+  // 判断是否使用自己的 API key
+  if (apiKey) {
+    data.apiKey = apiKey;
   }
-  
 
-  // 添加响应消息到窗口,流式响应此方法会执行多次
-  function addResponseMessage(message) {
-    let lastResponseElement = $(".message-bubble .response").last();
-    lastResponseElement.empty();
-    if ($(".answer .others .center").css("display") === "none") {
-      $(".answer .others .center").css("display", "flex");
+  // 判断是否使用自己的 API key
+  const api_url = localStorage.getItem('api_url');
+  if (api_url) {
+    data.api_url = api_url;
+  }
+
+  // 判断是否开启连续对话
+  data.prompts = messages.slice(); // 拷贝一份全局 messages 赋值给 data.prompts,然后对 data.prompts 处理
+  if (localStorage.getItem('continuousDialogue') == 'true') {
+    // 控制上下文，对话长度超过4轮，取最新的3轮,即数组最后7条数据
+    if (data.prompts.length > 8) {
+      data.prompts.splice(0, data.prompts.length - 7);
     }
-    let escapedMessage;
-    // 处理流式消息中的代码块
-    let codeMarkCount = 0;
-    let index = message.indexOf('```');
-    while (index !== -1) {
-      codeMarkCount ++ ;
-      index = message.indexOf('```', index + 3);
-    }
-    if(codeMarkCount % 2 == 1  ){  // 有未闭合的 code
-      escapedMessage = marked.parse(message + '\n\n```'); 
-    }else if(codeMarkCount % 2 == 0 && codeMarkCount != 0){
-      escapedMessage = marked.parse(message);  // 响应消息markdown实时转换为html
-    }else if(codeMarkCount == 0){  // 输出的代码没有markdown代码块
-      if (message.includes('`')){
-        escapedMessage = marked.parse(message);  // 没有markdown代码块，但有代码段，依旧是markdown格式
-      }else{
-        escapedMessage = marked.parse(escapeHtml(message)); // 有可能不是markdown格式，都用escapeHtml处理后再转换，防止非markdown格式html紊乱页面
+  } else {
+    data.prompts.splice(0, data.prompts.length - 1); // 未开启连续对话，取最后一条
+  }
+  data.prompts = JSON.stringify(data.prompts);
+
+  // 发送信息到后台
+  $.ajax({
+    url: '/chat',
+    method: 'POST',
+    data: data,
+    xhrFields: {
+      onprogress: function(e) {
+        // 显示加载状态
+        let lastResponseElement = $(".message-bubble .response").last();
+        lastResponseElement.empty();
+        lastResponseElement.append('<span class="loading-icon"><i class="fa fa-spinner fa-pulse fa-2x"></i></span>');
+        chatWindow.scrollTop(chatWindow.prop('scrollHeight'));
       }
-    }
-    lastResponseElement.append(escapedMessage);
-    chatWindow.scrollTop(chatWindow.prop('scrollHeight'));
+    },
+success: function(result) {
+  // 查找最后一个消息元素
+  let lastMessageElement = $(".message-bubble").last();
+
+  // 查找最后一个回复消息元素
+  let lastResponseElement = lastMessageElement.find('.response').last();
+
+  // 如果存在未完成的回复消息元素，则更新该元素的内容
+  if (lastResponseElement.find('.loading-icon').length > 0) {
+    lastResponseElement.empty();
+    lastResponseElement.append('<span class="loading-icon"><i class="fa fa-spinner fa-pulse fa-2x"></i></span>');
+  } else {
+    // 否则，创建新的回复消息元素
+    lastResponseElement = $('<div class="message-bubble"><span class="chat-icon response-icon"></span><div class="message-text response"><div class="message-text">' + result + '</div><button class="copy-button"><i class="far fa-copy"></i></button><button class="delete-message-btn"><i class="far fa-trash-alt"></i></button></div></div>');
+
+    // 将新的回复消息元素添加到最后一个消息元素中
+    lastMessageElement.after(lastResponseElement);
   }
+
+  // 添加响应消息内容
+  addResponseMessage(result, lastResponseElement);
+},
+
+    error: function(jqXHR, textStatus, errorThrown) {
+      // 显示错误消息
+      addFailMessage('出错啦！请检查参数或稍后再试!');
+    },
+    complete: function(XMLHttpRequest, status) {
+      // 显示完成状态
+      chatBtn.attr('disabled', false);
+      $(".answer .others .center").css("display", "none");
+      copy();
+      // 复制成功后将复制按钮显示为√，并在几秒后恢复
+      let copyButton = $(".message-bubble .response .copy-button").last();
+      copyButton.html('<i class="far fa-check-circle"></i>');
+      setTimeout(function() {
+        copyButton.html('<i class="far fa-copy"></i>');
+      }, 2000);
+    }
+  });
+}
+
+
+// 添加响应消息到窗口,流式响应此方法会执行多次
+function addResponseMessage(message) {
+  let lastResponseElement = $(".message-bubble .response").last();
+  lastResponseElement.empty();
+  if ($(".answer .others .center").css("display") === "none") {
+    $(".answer .others .center").css("display", "flex");
+  }
+  let escapedMessage;
+  // 处理流式消息中的代码块
+  let codeMarkCount = 0;
+  let index = message.indexOf('```');
+  while (index !== -1) {
+    codeMarkCount++;
+    index = message.indexOf('```', index + 3);
+  }
+  if (codeMarkCount % 2 == 1) {  // 有未闭合的 code
+    escapedMessage = marked.parse(message + '\n\n```');
+  } else if (codeMarkCount % 2 == 0 && codeMarkCount != 0) {
+    escapedMessage = marked.parse(message);  // 响应消息markdown实时转换为html
+  } else if (codeMarkCount == 0) {  // 输出的代码没有markdown代码块
+    if (message.includes('`')) {
+      escapedMessage = marked.parse(message);  // 没有markdown代码块，但有代码段，依旧是markdown格式
+    } else {
+      escapedMessage = marked.parse(escapeHtml(message)); // 有可能不是markdown格式，都用escapeHtml处理后再转换，防止非markdown格式html紊乱页面
+    }
+  }
+  lastResponseElement.append('<div class="message-text">' + escapedMessage + '</div>' + '<button class="copy-button"><i class="far fa-copy"></i></button>' + '<button class="delete-message-btn"><i class="far fa-trash-alt"></i></button>');
+  chatWindow.scrollTop(chatWindow.prop('scrollHeight'));
+
+  // 绑定复制按钮点击事件
+  let copyButton = lastResponseElement.find('.copy-button').last();
+  copyButton.click(function() {
+    let messageText = $(this).prev().html(); // 获取响应消息的内容（包括HTML标签）
+    copyMessage(messageText); // 调用复制消息函数，传入响应消息内容
+  });
+
+  // 绑定删除按钮点击事件
+  let deleteButton = lastResponseElement.find('.delete-message-btn').last();
+  deleteButton.click(function() {
+    $(this).closest('.message-bubble').remove(); // 删除该条响应消息
+  });
+}
+
+// 复制按钮点击事件
+$(document).on('click', '.copy-button', function() {
+  let messageText = $(this).prev().text().trim(); // 去除末尾的换行符
+  // 创建一个临时文本框用于复制内容
+  let tempTextarea = $('<textarea>');
+  tempTextarea.val(messageText).css({position: 'absolute', left: '-9999px'}).appendTo('body').select();
+  document.execCommand('copy');
+  tempTextarea.remove();
+
+  // 将复制按钮显示为√
+  let checkMark = $('<i class="far fa-check-circle"></i>'); // 创建√图标元素
+  $(this).html(checkMark); // 替换按钮内容为√图标
+
+  // 延时一段时间后恢复原始复制按钮
+  let originalButton = $(this);
+  setTimeout(function() {
+    originalButton.html('<i class="far fa-copy"></i>'); // 恢复原始复制按钮内容
+  }, 2000); // 设置延时时间为2秒
+});
 
   // 添加失败信息到窗口
   function addFailMessage(message) {
@@ -90,113 +376,131 @@ $(document).ready(function() {
   // 定义一个变量保存ajax请求对象
   let ajaxRequest = null;
   
-  // 处理用户输入
-  chatBtn.click(function() {
+ // 读取并处理用户输入的多个 API key
+function getRandomApiKey() {
+    const apiKeysInput = $(".settings-common .api-key").val();
+    const apiKeysArray = apiKeysInput.split(',');
+    const randomIndex = Math.floor(Math.random() * apiKeysArray.length);
+    return apiKeysArray[randomIndex];
+}
+
+// 处理用户输入
+chatBtn.click(function() {
     // 解绑键盘事件
-    chatInput.off("keydown",handleEnter);
-    
+    chatInput.off("keydown", handleEnter);
+
+    // 获取随机的 API key
+    const apiKey = getRandomApiKey();
+
     // ajax上传数据
     let data = {};
     data.model = $(".settings-common .model").val();
+    data.temperature = parseFloat($(".settings-common .temperature").val());
+    data.max_tokens = parseInt($(".settings-common .max-tokens").val());
 
     // 判断消息是否是正常的标志变量
     let resFlag = true;
-   
-    // 判断是否使用自己的api key
-    let apiKey = localStorage.getItem('apiKey');
-    if (apiKey){
-      data.apiKey = apiKey;
+
+    // 判断是否使用自己的 api key
+    if (apiKey) {
+        data.apiKey = apiKey;
+    }
+
+    // 判断是否使用自己的 api key
+    const api_url = localStorage.getItem('api_url');
+    if (api_url) {
+        data.api_url = api_url;
     }
 
     // 接收输入信息变量
     let message = chatInput.val();
-    if (message.length == 0){
-      // 重新绑定键盘事件
-      chatInput.on("keydown",handleEnter);
-      return ;
+    if (message.length == 0) {
+        // 重新绑定键盘事件
+        chatInput.on("keydown", handleEnter);
+        return;
     }
 
     addRequestMessage(message);
     // 将用户消息保存到数组
-    messages.push({"role": "user", "content": message})
+    messages.push({"role": "user", "content": message});
     // 收到回复前让按钮不可点击
-    chatBtn.attr('disabled',true)
+    chatBtn.attr('disabled', true);
 
-    if(messages.length>40){
-      addFailMessage("此次对话长度过长，请点击下方删除按钮清除对话内容！");
-      // 重新绑定键盘事件
-      chatInput.on("keydown",handleEnter);
-      chatBtn.attr('disabled',false) // 让按钮可点击
-      return ;
+    if (messages.length > 40) {
+        addFailMessage("此次对话长度过长，请点击下方删除按钮清除对话内容！");
+        // 重新绑定键盘事件
+        chatInput.on("keydown", handleEnter);
+        chatBtn.attr('disabled', false); // 让按钮可点击
+        return;
     }
-    
+
     // 判读是否已开启连续对话
-    data.prompts = messages.slice();  // 拷贝一份全局messages赋值给data.prompts,然后对data.prompts处理
-    if(localStorage.getItem('continuousDialogue') == 'true'){
-      // 控制上下文，对话长度超过4轮，取最新的3轮,即数组最后7条数据
-      if(data.prompts.length > 8) {
-        data.prompts.splice(0, data.prompts.length - 7);
-      }
-    }else{
-      data.prompts.splice(0, data.prompts.length - 1); // 未开启连续对话，取最后一条
+    data.prompts = messages.slice();  // 拷贝一份全局 messages 赋值给 data.prompts,然后对 data.prompts 处理
+    if (localStorage.getItem('continuousDialogue') == 'true') {
+        // 控制上下文，对话长度超过4轮，取最新的3轮,即数组最后7条数据
+        if (data.prompts.length > 8) {
+            data.prompts.splice(0, data.prompts.length - 7);
+        }
+    } else {
+        data.prompts.splice(0, data.prompts.length - 1); // 未开启连续对话，取最后一条
     }
     data.prompts = JSON.stringify(data.prompts);
-    
+
     let res;
     // 发送信息到后台
     ajaxRequest = $.ajax({
-      url: '/chat',
-      method: 'POST',
-      data: data,
-      xhrFields: {
-        onprogress: function(e) {
-          res = e.target.responseText;
-          let resJsonObj;
-          try{
-            resJsonObj = JSON.parse(res);  // 只有错误信息是json类型字符串,且一次返回
-            if(resJsonObj.hasOwnProperty("error")){
-              addFailMessage(resJsonObj.error.type + " : " + resJsonObj.error.message + " " + resJsonObj.error.code);
-              resFlag = false;
-            }else{
-              addResponseMessage(res);
+        url: '/chat',
+        method: 'POST',
+        data: data,
+        xhrFields: {
+            onprogress: function(e) {
+                res = e.target.responseText;
+                let resJsonObj;
+                try {
+                    resJsonObj = JSON.parse(res);  // 只有错误信息是json类型字符串,且一次返回
+                    if (resJsonObj.hasOwnProperty("error")) {
+                        addFailMessage(resJsonObj.error.type + " : " + resJsonObj.error.message + " " + resJsonObj.error.code);
+                        resFlag = false;
+                    } else {
+                        addResponseMessage(res);
+                    }
+                } catch (e) {
+                    addResponseMessage(res);
+                }
             }
-          }catch(e){
-            addResponseMessage(res);
-          }
+        },
+        success: function(result) {
+            // 判断是否是回复正确信息
+            if (resFlag) {
+                messages.push({"role": "assistant", "content": result});
+                // 判断是否本地存储历史会话
+                if (localStorage.getItem('archiveSession') == "true") {
+                    localStorage.setItem("session", JSON.stringify(messages));
+                }
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (textStatus === 'abort') {
+                messages.push({"role": "assistant", "content": res});
+                if (localStorage.getItem('archiveSession') == "true") {
+                    localStorage.setItem("session", JSON.stringify(messages));
+                }
+            } else {
+                addFailMessage('出错啦！请检查参数或稍后再试!');
+            }
+        },
+        complete: function(XMLHttpRequest, status) {
+            // 收到回复，让按钮可点击
+            chatBtn.attr('disabled', false);
+            // 重新绑定键盘事件
+            chatInput.on("keydown", handleEnter);
+            ajaxRequest = null;
+            $(".answer .others .center").css("display", "none");
+            // 添加复制
+            copy();
         }
-      },
-      success:function(result){
-        // 判断是否是回复正确信息
-        if(resFlag){
-          messages.push({"role": "assistant", "content": result});
-          // 判断是否本地存储历史会话
-          if(localStorage.getItem('archiveSession')=="true"){
-            localStorage.setItem("session",JSON.stringify(messages));
-          }
-        }
-      },
-      error: function(jqXHR, textStatus, errorThrown) {
-        if (textStatus === 'abort') {
-          messages.push({"role": "assistant", "content": res});
-          if(localStorage.getItem('archiveSession')=="true"){
-            localStorage.setItem("session",JSON.stringify(messages));
-          }
-        } else {
-          addFailMessage('出错啦！请稍后再试!');
-        }
-      },
-      complete : function(XMLHttpRequest,status){
-        // 收到回复，让按钮可点击
-        chatBtn.attr('disabled',false)
-        // 重新绑定键盘事件
-        chatInput.on("keydown",handleEnter); 
-        ajaxRequest = null;
-        $(".answer .others .center").css("display","none");
-        // 添加复制
-        copy();
-      }
     });
-  });
+});
 
   // 停止输出
   $('.stop a').click(function() {
@@ -269,6 +573,34 @@ $(document).ready(function() {
     }
   })
 
+  // 读取apiKey
+  const api_url = localStorage.getItem('api_url');
+  if (api_url) {
+    $(".settings-common .api_url").val(api_url);
+  }
+
+  // apiKey输入框事件
+  $(".settings-common .api_url").blur(function() { 
+    const api_url = $(this).val();
+    if(api_url.length!=0){
+      localStorage.setItem('api_url', api_url);
+    }else{
+      localStorage.removeItem('api_url');
+    }
+  })
+
+// 读取model配置
+    const selectedModel = localStorage.getItem('selectedModel');
+    if (selectedModel) {
+        $(".settings-common .model").val(selectedModel);
+    }
+
+    // 监听model选择的变化
+    $('.settings-common .model').change(function() {
+        const selectedModel = $(this).val();
+        localStorage.setItem('selectedModel', selectedModel);
+    });
+
   // 是否保存历史对话
   var archiveSession = localStorage.getItem('archiveSession');
 
@@ -339,13 +671,20 @@ $(document).ready(function() {
     }
   });
 
-  // 删除功能
-  $(".delete a").click(function(){
-    chatWindow.empty();
-    $(".answer .tips").css({"display":"flex"});
-    messages = [];
-    localStorage.removeItem("session");
-  });
+// 删除输入框中的消息
+function deleteInputMessage() {
+  chatInput.val('');
+}
+
+// 删除功能
+$(".delete a").click(function(){
+  chatWindow.empty();
+  deleteInputMessage();
+  $(".answer .tips").css({"display":"flex"});
+  messages = [];
+  localStorage.removeItem("session");
+});
+
 
   // 截图功能
   $(".screenshot a").click(function() {
