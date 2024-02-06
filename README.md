@@ -20,6 +20,7 @@
 ![屏幕截图 2024-02-06 231718](https://github.com/buwanyuanshen/ChatGPT-website-plus/assets/144007759/6e51ac46-a42f-45e1-a343-bc645815a7ac)
 
 2.新增多种主题风格任意挑选！
+
 ![屏幕截图 2024-02-06 231729](https://github.com/buwanyuanshen/ChatGPT-website-plus/assets/144007759/94b30e21-152b-48df-8ae1-0afadba17791)
 
 3.新增对每条对话的复制，编辑，重新发送，删除操作。
