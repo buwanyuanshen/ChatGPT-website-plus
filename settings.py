@@ -11,7 +11,7 @@ API_KEYS = [
 
 ]
 
-# openAi 官方 api
-API_URL = "https://api.openai.com"
+# openAi 代理 api
+API_URL = "https://api.openai-proxy.com"
 
 
