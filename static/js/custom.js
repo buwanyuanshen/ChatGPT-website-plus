@@ -44,9 +44,10 @@ deleteBtn.addEventListener('click', function () {
     iptContainer.style.height = '50px'; // 将外部容器的高度也设置为初始值
 });
 
-// 监听回车键按下事件
+// 监听键盘按下事件
 chatInput.addEventListener('keydown', function (event) {
-    if (event.keyCode === 13) { // 判断是否按下回车键
+    // 判断同时按下Ctrl键和Enter键
+    if (event.ctrlKey && event.keyCode === 13) {
         // 设置输入框的初始高度
         chatInput.style.height = '32px';
         iptContainer.style.height = '50px'; // 将外部容器的高度也设置为初始值
@@ -413,7 +414,7 @@ chatBtn.click(function() {
     }
 
     // 接收输入信息变量
-    let message = chatInput.val();
+    let message = chatInput.val().trim(); // 去除字符串两端的空白字符
     if (message.length == 0) {
         // 重新绑定键盘事件
         chatInput.on("keydown", handleEnter);
@@ -509,16 +510,18 @@ chatBtn.click(function() {
     }
   })
 
-  // Enter键盘事件
-  function handleEnter(e){
-    if (e.keyCode==13){
-      chatBtn.click();
-      e.preventDefault();  //避免回车换行
-    }
+// Enter键盘事件
+function handleEnter(e){
+  // 判断同时按下Ctrl键和Enter键
+  if (e.ctrlKey && e.keyCode == 13){
+    chatBtn.click();
+    e.preventDefault();  //避免回车换行
   }
+}
 
-  // 绑定Enter键盘事件
-  chatInput.on("keydown",handleEnter);
+// 绑定Ctrl + Enter键盘事件
+chatInput.on("keydown", handleEnter);
+
 
   // 设置栏宽度自适应
   let width = $('.function .others').width();
