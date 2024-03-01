@@ -12,7 +12,7 @@
 
 1. 下载所有文件到目录下，提前安装python3
 2. 在文件目录下进入cmd，输入pip install -r requirements.txt安装依赖
-3. 修改配置：settings.txt填写apikey和代理地址。
+3. 修改配置：settings.py填写apikey和代理地址。
 4. 进入项目，输入python app.py，即可在浏览器网址栏输入127.0.0.1:80查看网站。
    
 
