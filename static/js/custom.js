@@ -652,7 +652,7 @@ chatInput.on("keydown", handleEnter);
 
 // 读取max_tokens 
   const max_tokens  = localStorage.getItem('max_tokens ');
-  if (temperature) {
+  if (max_tokens) {
     $(".settings-common .max-tokens-input").val(max_tokens );
     $(".settings-common .max-tokens ").val(max_tokens );
   }
