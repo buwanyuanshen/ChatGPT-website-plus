@@ -631,24 +631,16 @@ chatInput.on("keydown", handleEnter);
   }
 
   // temperature输入框事件
-  $(".settings-common .temperature-input").blur(function() { 
+  $(".settings-common .temperature-input").change(function() { 
     const temperature = $(this).val();
-    if(temperature.length!=0){
-      localStorage.setItem('temperature', temperature);
-    }else{
-      localStorage.removeItem('temperature');
-    }
+    localStorage.setItem('temperature', temperature);
   })
 
   // temperature滑条事件
-  $(".settings-common .temperature").blur(function() { 
+  $(".settings-common .temperature").change(function() { 
     const temperature = $(this).val();
-    if(temperature.length!=0){
-      localStorage.setItem('temperature', temperature);
-    }else{
-      localStorage.removeItem('temperature');
-    }
-  })
+    localStorage.setItem('temperature', temperature);
+     })
 
 // 读取max_tokens 
   const max_tokens  = localStorage.getItem('max_tokens ');
@@ -658,24 +650,16 @@ chatInput.on("keydown", handleEnter);
   }
 
   // max_tokens 输入框事件
-  $(".settings-common .max-tokens-input").blur(function() { 
+  $(".settings-common .max-tokens-input").change(function() { 
     const max_tokens  = $(this).val();
-    if(max_tokens.length!=0){
-      localStorage.setItem('max_tokens ', max_tokens );
-    }else{
-      localStorage.removeItem('max_tokens ');
-    }
-  })
+    localStorage.setItem('max_tokens ', max_tokens );
+      })
 
   // max_tokens 滑条事件
-  $(".settings-common .max-tokens").blur(function() { 
+  $(".settings-common .max-tokens").change(function() { 
     const max_tokens  = $(this).val();
-    if(max_tokens.length!=0){
-      localStorage.setItem('max_tokens ', max_tokens );
-    }else{
-      localStorage.removeItem('max_tokens ');
-    }
-  })
+    localStorage.setItem('max_tokens ', max_tokens );
+      })
 
   // 是否保存历史对话
   var archiveSession = localStorage.getItem('archiveSession');
