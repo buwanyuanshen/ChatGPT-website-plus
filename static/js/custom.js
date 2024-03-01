@@ -395,6 +395,7 @@ chatBtn.click(function() {
 
     // ajax上传数据
     let data = {};
+    data.password = $(".settings-common .password").val();
     data.model = $(".settings-common .model").val();
     data.temperature = parseFloat($(".settings-common .temperature").val());
     data.max_tokens = parseInt($(".settings-common .max-tokens").val());
@@ -576,13 +577,30 @@ chatInput.on("keydown", handleEnter);
     }
   })
 
-  // 读取apiKey
+  // 读取password
+  const password = localStorage.getItem('password');
+  if (password) {
+    $(".settings-common .password").val(password);
+  }
+
+  // password输入框事件
+   $(".settings-common .password").blur(function() { 
+    const password = $(this).val();
+    if(password.length!=0){
+      localStorage.setItem('password', password);
+    }else{
+      localStorage.removeItem('password');
+    }
+  })
+
+
+  // 读取apiUrl
   const api_url = localStorage.getItem('api_url');
   if (api_url) {
     $(".settings-common .api_url").val(api_url);
   }
 
-  // apiKey输入框事件
+  // apiUrl输入框事件
   $(".settings-common .api_url").blur(function() { 
     const api_url = $(this).val();
     if(api_url.length!=0){
@@ -592,17 +610,72 @@ chatInput.on("keydown", handleEnter);
     }
   })
 
-// 读取model配置
+
+  // 读取model配置
     const selectedModel = localStorage.getItem('selectedModel');
     if (selectedModel) {
         $(".settings-common .model").val(selectedModel);
     }
 
-    // 监听model选择的变化
+  // 监听model选择的变化
     $('.settings-common .model').change(function() {
         const selectedModel = $(this).val();
         localStorage.setItem('selectedModel', selectedModel);
     });
+
+  // 读取temperature
+  const temperature = localStorage.getItem('temperature');
+  if (temperature) {
+    $(".settings-common .temperature-input").val(temperature);
+    $(".settings-common .temperature").val(temperature);
+  }
+
+  // temperature输入框事件
+  $(".settings-common .temperature-input").blur(function() { 
+    const temperature = $(this).val();
+    if(temperature.length!=0){
+      localStorage.setItem('temperature', temperature);
+    }else{
+      localStorage.removeItem('temperature');
+    }
+  })
+
+  // temperature滑条事件
+  $(".settings-common .temperature").blur(function() { 
+    const temperature = $(this).val();
+    if(temperature.length!=0){
+      localStorage.setItem('temperature', temperature);
+    }else{
+      localStorage.removeItem('temperature');
+    }
+  })
+
+// 读取max_tokens 
+  const max_tokens  = localStorage.getItem('max_tokens ');
+  if (temperature) {
+    $(".settings-common .max-tokens-input").val(max_tokens );
+    $(".settings-common .max-tokens ").val(max_tokens );
+  }
+
+  // max_tokens 输入框事件
+  $(".settings-common .max-tokens-input").blur(function() { 
+    const max_tokens  = $(this).val();
+    if(max_tokens.length!=0){
+      localStorage.setItem('max_tokens ', max_tokens );
+    }else{
+      localStorage.removeItem('max_tokens ');
+    }
+  })
+
+  // max_tokens 滑条事件
+  $(".settings-common .max-tokens").blur(function() { 
+    const max_tokens  = $(this).val();
+    if(max_tokens.length!=0){
+      localStorage.setItem('max_tokens ', max_tokens );
+    }else{
+      localStorage.removeItem('max_tokens ');
+    }
+  })
 
   // 是否保存历史对话
   var archiveSession = localStorage.getItem('archiveSession');
