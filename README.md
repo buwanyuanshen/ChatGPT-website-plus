@@ -18,7 +18,7 @@
 
 ## 新增功能展示
 1.支持多个apikey填写，temperature和max-tokens在前端的填写：
-![屏幕截图 2024-02-06 231718](https://github.com/buwanyuanshen/ChatGPT-website-plus/assets/144007759/6e51ac46-a42f-45e1-a343-bc645815a7ac)
+![image](https://github.com/buwanyuanshen/ChatGPT-website-plus/assets/144007759/e0d58358-26d9-49ec-943f-6261f7dc6e25)
 
 2.新增多种主题风格任意挑选！
 
