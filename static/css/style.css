@@ -245,9 +245,12 @@ body {
   .foot p a{
     font-size: 13px !important;
   }
-    .settings-common {
-        width: 110%;
-    }
+  .settings-common {
+        width: 120%;
+  }
+  .dropdown-menu {
+        width: 120%;
+  }
 }
 
 @media screen and (min-width: 1200px) {
@@ -657,7 +660,7 @@ input[type="checkbox"]:checked + .check-trail .check-handler::before {
     .lead.text-center a {
         margin: 5.5px;
     }
-.settings-common {
-    height: 40px; 
-    max-height: none; 
-}
+    .settings-common {
+        height: 35px; 
+        max-height: none; 
+    }
