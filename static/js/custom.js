@@ -301,22 +301,26 @@ success: function(result) {
   });
 }
 
-
-// 添加响应消息到窗口,流式响应此方法会执行多次
+// 添加响应消息到窗口，流式响应此方法会执行多次
 function addResponseMessage(message) {
   let lastResponseElement = $(".message-bubble .response").last();
   lastResponseElement.empty();
+
   if ($(".answer .others .center").css("display") === "none") {
     $(".answer .others .center").css("display", "flex");
   }
+
   let escapedMessage;
+
   // 处理流式消息中的代码块
   let codeMarkCount = 0;
   let index = message.indexOf('```');
+  
   while (index !== -1) {
     codeMarkCount++;
     index = message.indexOf('```', index + 3);
   }
+
   if (codeMarkCount % 2 == 1) {  // 有未闭合的 code
     escapedMessage = marked.parse(message + '\n\n```');
   } else if (codeMarkCount % 2 == 0 && codeMarkCount != 0) {
@@ -328,8 +332,43 @@ function addResponseMessage(message) {
       escapedMessage = marked.parse(escapeHtml(message)); // 有可能不是markdown格式，都用escapeHtml处理后再转换，防止非markdown格式html紊乱页面
     }
   }
-  lastResponseElement.append('<div class="message-text">' + escapedMessage + '</div>' + '<button class="copy-button"><i class="far fa-copy"></i></button>' + '<button class="delete-message-btn"><i class="far fa-trash-alt"></i></button>');
+
+  if (message.includes('https://')) {
+    // 使用正则表达式提取链接
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    const urls = message.match(urlRegex);
+
+    if (urls && urls.length > 0) {
+      // 获取第一个链接，并将其添加到img标签中
+      const imageUrl = urls[0];
+      lastResponseElement.append('<div class="message-text">' + '<img src="' + imageUrl + '" style="max-width: 25%; max-height: 25%;" alt="messages"> ' + '</div>' + '<button class="view-button"><i class="fas fa-search"></i></button>' + '<button class="delete-message-btn"><i class="far fa-trash-alt"></i></button>');
+
+    }
+  } else if (message.startsWith('"//')) {
+    // 处理包含base64编码的音频
+    const base64Data = message.replace(/"/g, '');
+    lastResponseElement.append('<div class="message-text">' + '<audio controls=""><source src="data:audio/mpeg;base64,' + base64Data + '" type="audio/mpeg"></audio> ' + '</div>' + '<button class="delete-message-btn"><i class="far fa-trash-alt"></i></button>');
+  } 
+else if (message.startsWith('//')) {
+    // 处理包含base64编码的音频
+    const base64Data = message
+    lastResponseElement.append('<div class="message-text">' + '<audio controls=""><source src="data:audio/mpeg;base64,' + base64Data + '" type="audio/mpeg"></audio> ' + '</div>' + '<button class="delete-message-btn"><i class="far fa-trash-alt"></i></button>');
+  } 
+else {
+    lastResponseElement.append('<div class="message-text">' + escapedMessage + '</div>' + '<button class="copy-button"><i class="far fa-copy"></i></button>' + '<button class="delete-message-btn"><i class="far fa-trash-alt"></i></button>');
+  }
+
   chatWindow.scrollTop(chatWindow.prop('scrollHeight'));
+
+// 绑定查看按钮事件
+$('.view-button').on('click', function() {
+  // Get the image URL
+  const imageUrl = $(this).siblings('.message-text').find('img').attr('src');
+
+  // Open the image in a new window or tab
+  window.open(imageUrl, '_blank');
+});
+
 
   // 绑定复制按钮点击事件
   let copyButton = lastResponseElement.find('.copy-button').last();
@@ -426,7 +465,7 @@ chatBtn.click(function() {
     // 将用户消息保存到数组
     messages.push({"role": "user", "content": message});
     // 收到回复前让按钮不可点击
-    chatBtn.attr('disabled', true);
+   chatBtn.attr('disabled', true);
 
     if (messages.length > 40) {
         addFailMessage("此次对话长度过长，请点击下方删除按钮清除对话内容！");
@@ -447,6 +486,8 @@ chatBtn.click(function() {
         data.prompts.splice(0, data.prompts.length - 1); // 未开启连续对话，取最后一条
     }
     data.prompts = JSON.stringify(data.prompts);
+
+
 
     let res;
     // 发送信息到后台
@@ -610,18 +651,74 @@ chatInput.on("keydown", handleEnter);
     }
   })
 
+// 读取model配置
+const selectedModel = localStorage.getItem('selectedModel');
 
-  // 读取model配置
-    const selectedModel = localStorage.getItem('selectedModel');
-    if (selectedModel) {
-        $(".settings-common .model").val(selectedModel);
+// 检测是否含有"tts"或"dall"并设置连续对话状态
+function checkAndSetContinuousDialogue(modelName) {
+    const hasTTS = modelName.toLowerCase().includes("tts");
+    const hasCompletion1 = modelName.toLowerCase().includes("gpt-3.5-turbo-instruct");
+    const hasCompletion2 = modelName.toLowerCase().includes("babbage-002");
+    const hasCompletion3 = modelName.toLowerCase().includes("davinci-002");
+    const hasTextem = modelName.toLowerCase().includes("text-embedding");
+    const hasTextmo = modelName.toLowerCase().includes("text-moderation");
+    const hasDALL = modelName.toLowerCase().includes("dall");
+    const hasVs = modelName.toLowerCase().includes("gpt-4-vision-preview");
+    const isContinuousDialogueEnabled = !(hasTTS || hasDALL || hasCompletion1 || hasCompletion2 || hasCompletion3 || hasTextem || hasTextmo || hasVs);
+
+    // 设置连续对话状态
+    $("#chck-2").prop("checked", isContinuousDialogueEnabled);
+    localStorage.setItem('continuousDialogue', isContinuousDialogueEnabled);
+
+    // 设置是否禁用checkbox
+    $("#chck-2").prop("disabled", hasTTS || hasDALL || hasCompletion1 || hasCompletion2 || hasCompletion3 || hasTextem || hasTextmo || hasVs);
+
+    // 获取上一个模型名称
+    const previousModel = localStorage.getItem('previousModel') || "";
+    const hadTTS = previousModel.toLowerCase().includes("tts");
+    const hadDALL = previousModel.toLowerCase().includes("dall");
+    const hadCompletion1 = previousModel.toLowerCase().includes("gpt-3.5-turbo-instruct");
+    const hadCompletion2 = previousModel.toLowerCase().includes("babbage-002");
+    const hadCompletion3= previousModel.toLowerCase().includes("davinci-002");
+    const hadTextem = previousModel.toLowerCase().includes("text-embedding");
+    const hadTextmo = previousModel.toLowerCase().includes("text-moderation");
+    const hadVs = previousModel.toLowerCase().includes("gpt-4-vision-preview");
+    // 如果从包含tts或dall的模型切换到不包含这些的模型，清除对话
+    if ((hadTTS || hadDALL || hadCompletion1 || hadCompletion2 || hadCompletion3 || hadTextem || hadTextmo || hadVs) && !(hasTTS || hasDALL || hasCompletion1 || hasCompletion2 || hasCompletion3 || hasTextem || hasTextmo|| hasVs)) {
+        clearConversation();
     }
 
-  // 监听model选择的变化
-    $('.settings-common .model').change(function() {
-        const selectedModel = $(this).val();
-        localStorage.setItem('selectedModel', selectedModel);
-    });
+    // 更新上一个模型名称为当前模型
+    localStorage.setItem('previousModel', modelName);
+}
+
+// 初始加载时检测selectedModel
+if (selectedModel) {
+    $(".settings-common .model").val(selectedModel);
+    checkAndSetContinuousDialogue(selectedModel);
+}
+
+// 监听model选择的变化
+$('.settings-common .model').change(function() {
+    const selectedModel = $(this).val();
+    localStorage.setItem('selectedModel', selectedModel);
+    checkAndSetContinuousDialogue(selectedModel);
+});
+
+// 删除对话
+function clearConversation() {
+    chatWindow.empty();
+    deleteInputMessage();
+    $(".answer .tips").css({"display":"flex"});
+    messages = [];
+    localStorage.removeItem("session");
+}
+
+// 删除功能
+$(".delete a").click(function(){
+    clearConversation();
+});
+
 
   // 读取temperature
   const temperature = localStorage.getItem('temperature');
@@ -745,6 +842,10 @@ $(".delete a").click(function(){
   localStorage.removeItem("session");
 });
 
+// 删除功能
+$(".delete a").click(function(){
+    clearConversation();
+});
 
   // 截图功能
   $(".screenshot a").click(function() {
