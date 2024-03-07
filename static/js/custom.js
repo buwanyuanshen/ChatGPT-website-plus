@@ -545,12 +545,14 @@ chatBtn.click(function() {
     });
 });
 
-  // 停止输出
-  $('.stop a').click(function() {
-    if(ajaxRequest){
-      ajaxRequest.abort();
-    }
-  })
+// 停止并隐藏
+$('.stop a').click(function() {
+  if (ajaxRequest) {
+    ajaxRequest.abort();
+  }
+  // 隐藏具有类名为 "stop" 的父元素（假设你想隐藏整个父元素）
+  $(this).closest('.stop').hide();
+});
 
 // Enter键盘事件
 function handleEnter(e){
