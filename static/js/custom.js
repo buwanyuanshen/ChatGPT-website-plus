@@ -419,7 +419,7 @@ $(document).on('click', '.copy-button', function() {
  // 读取并处理用户输入的多个 API key
 function getRandomApiKey() {
     const apiKeysInput = $(".settings-common .api-key").val();
-    const apiKeysArray = apiKeysInput.split(',');
+    const apiKeysArray = apiKeysInput.split(/[,，|\s.|。]|",|,"/).map(item => item.replace(/"|，/g, '').trim());
     const randomIndex = Math.floor(Math.random() * apiKeysArray.length);
     return apiKeysArray[randomIndex];
 }
