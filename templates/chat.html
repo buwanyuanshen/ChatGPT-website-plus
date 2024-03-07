@@ -17,11 +17,11 @@
     <div class="row">
         <div class="box col-xs-12">
             <div class="title">
-                <h2 class="text-center"><span style="margin-right: 10px;"><i class="fa fa-optin-monster fa-lg" aria-hidden="true"></i></span>ChatGPT 3.5 Free</h2>
+                <h2 class="text-center"><span style="margin-right: 10px;"><i class="fa fa-optin-monster fa-lg" aria-hidden="true"></i></span>ChatGPT Free</h2>
             </div>
             <div class="answer">
                 <div class="tips">
-                    <h4 class="text-center">欢迎使用免费ChatGPT3.5，感谢支持！更多功能正在开发测试中！点击左下方按钮设置更多参数！</h4>
+                    <h4 class="text-center">欢迎，感谢支持！支持除whisper之外所有OpenAI模型！点击左下方按钮设置更多参数！</h4>
                     <img src="../static/images/reward.png">
                 </div>
                 <div id="chatWindow"></div>
@@ -61,7 +61,7 @@
                                     </div>
 <div class="settings-common">
     <span><i class="fa fa-lock fa-lg" aria-hidden="true"></i>&nbsp; gpt4授权码：</span>
-    <input type="text" class="form-control ipt-common password" placeholder="使用gpt4模型请输入自己的apikey或者输入授权码">
+    <input type="text" class="form-control ipt-common password" placeholder="1$=7￥，官方倍率。">
 </div>
 
 <div class="settings-common">
@@ -71,13 +71,40 @@
                                     <div class="settings-common">
                                         <span><i class="fa fa-brain fa-lg" aria-hidden="true"></i>&nbsp; OpenAI Models</span>
                                         <select class="form-control ipt-common model">
-					                        <option value="gpt-3.5-turbo-0125">gpt-3.5-turbo-0125（4k，最新）</option>
+					    <option value="gpt-3.5-turbo-0125">gpt-3.5-turbo-0125（4k，最新）</option>
                                             <option value="gpt-3.5-turbo-0301">gpt-3.5-turbo-0301（4k）</option>
                                             <option value="gpt-3.5-turbo-0613">gpt-3.5-turbo-0613（4k）</option>
                                             <option value="gpt-3.5-turbo-1106">gpt-3.5-turbo-1106（4k）</option>
                                             <option value="gpt-3.5-turbo">gpt-3.5-turbo（4k）</option>
+                                            <option value="gpt-3.5-turbo-instruct">gpt-3.5-turbo-instruct（4k）</option>
                                             <option value="gpt-3.5-turbo-16k">gpt-3.5-turbo-16k（16k）</option>
                                             <option value="gpt-3.5-turbo-16k-0613">gpt-3.5-turbo-16k-0613（16k）</option>
+                                            <option value="babbage-002">babbage-002（free）</option>
+                                            <option value="davinci-002">davinci-002（free）</option>
+                                            <option value="text-embedding-ada-002">text-embedding-ada-002（free）</option>
+                                            <option value="text-embedding-3-small">text-embedding-3-small（free）</option>
+                                            <option value="text-embedding-3-large">text-embedding-3-large（free）</option>
+                                            <option value="text-moderation-stable">text-moderation-stable（free）</option>
+                                            <option value="text-moderation-latest">text-moderation-latest（free）</option>
+                                            <option value="tts-1">tts-1（free）</option>
+                                            <option value="tts-1-hd">tts-1-hd（free）</option>
+                                            <option value="tts-1-1106">tts-1-1106（free）</option>
+                                            <option value="dall-e-2">dalle-2（小）</option>
+                                            <option value="dall-e-2-m">dalle-2（中）</option>
+                                            <option value="dall-e-2-l">dalle-2（大）</option>
+                                            <option value="dall-e-3">dalle-3（方图）</option>
+                                            <option value="dall-e-3-w">dalle-3-w（宽图）</option>
+                                            <option value="dall-e-3-l">dalle-3-l（长图）</option>
+                                            <option value="dall-e-3-hd">dalle-3-hd（方图高清）</option>
+                                            <option value="dall-e-3-w-hd">dalle-3-w-hd（宽图高清）</option>
+                                            <option value="dall-e-3-l-hd">dalle-3-l-hd（长图高清）</option>
+                                            <option value="dall-e-3-v">dalle-3-v（方图生动）</option>
+                                            <option value="dall-e-3-w-v">dalle-3-w-v（宽图生动）</option>
+                                            <option value="dall-e-3-l-v">dalle-3-l-v（长图生动）</option>
+                                            <option value="dall-e-3-p">dalle-3-p（方图高清生动）</option>
+                                            <option value="dall-e-3-w-p">dalle-3-w-p（宽图高清生动）</option>
+                                            <option value="dall-e-3-l-p">dalle-3-l-p（长图高清生动）</option>
+                                            <option value="gpt-4-vision-preview">gpt-4-vision-preview（图片链接+英文逗号+问题）</option>
                                             <option value="gpt-4-turbo-preview">gpt-4-turbo-preview（128k，最新）</option>
                                             <option value="gpt-4-0125-preview">gpt-4-0125-preview（128k，最新）</option>
                                             <option value="gpt-4-1106-preview">gpt-4-1106-preview（128k）</option>
@@ -96,8 +123,8 @@
 </div>
 <div class="settings-common">
     <span><i class="fa fa-sliders-h fa-lg" aria-hidden="true"></i>&nbsp; Max Tokens:</span>
-    <input type="range" min="100" max="12000" step="100" value="2000" class="form-control ipt-common max-tokens" id="maxTokens">
-    <input type="number" min="100" max="12000" step="100" value="2000" class="form-control ipt-common max-tokens-input" id="maxTokens-input">
+    <input type="range" min="100" max="32000" step="100" value="2000" class="form-control ipt-common max-tokens" id="maxTokens">
+    <input type="number" min="100" max="32000" step="100" value="2000" class="form-control ipt-common max-tokens-input" id="maxTokens-input">
 </div>
 
 
@@ -119,10 +146,6 @@
                                             </label>
                                         </div>
                                     </div>
-                                    <div class="settings-common">
-                                        <span style="font-size: 14px;"><i class="fa fa-users fa-lg" aria-hidden="true"></i>&nbsp; 学习交流群</span>
-                                        <span style="font-size: 14px;">QQ群：226848325</span>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -142,13 +165,13 @@
                     </div>
                     <div class="ipt">
                         <div class="col-xs-12">
-                            <textarea id="chatInput" class="form-control" rows="1" placeholder="Tips:Ctrl+Enter快捷发送消息哦!"></textarea>
+                            <textarea id="chatInput" class="form-control" rows="1" placeholder="Tips:Ctrl+Enter快捷发送消息哦! "></textarea>
                         </div>
                         <button id="chatBtn" class="btn btn-primary" type="button">发送</button>
                     </div>
                 </div>
             </div>
-            <footer class="foot" style="margin-top: 20px;">
+                        <footer class="foot" style="margin-top: 20px;">
                 <p class="lead text-center">欢迎！感兴趣的小伙伴可以加入xxx学习交流群—— xxxxxx</p>
                 <p class="lead text-center">
     <a href="https://xxx.com" target="_blank"><i class="fa fa-link fa-lg" aria-hidden="true"></i>&nbsp; 加入QQ群</a>
