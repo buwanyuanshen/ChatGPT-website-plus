@@ -395,7 +395,6 @@ def chat():
     if "gpt-4-vision-preview" in model:
         # 在解析响应数据后
         response_data = json.loads(resp.content.decode('utf-8'))
-        print(response_data)
         vs = response_data["choices"][0]["message"]["content"]
         return json.dumps(vs, ensure_ascii=False).strip('"').replace('\\n', '')
 
@@ -412,6 +411,7 @@ def chat():
             if chunk:
                 streamStr = chunk.decode("utf-8").replace("data: ", "")
                 try:
+                    streamStr = streamStr.strip("[DONE]")
                     streamDict = json.loads(streamStr)
                 except:
                     errorStr += streamStr.strip()
