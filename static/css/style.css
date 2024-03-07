@@ -76,6 +76,7 @@
 }
 
 :root[bg-theme='dark'] .copy-button i,
+:root[bg-theme='dark'] .view-button i,
 :root[bg-theme='dark'] .send-button i,
 :root[bg-theme='dark'] .edit-button i,
 :root[bg-theme='dark'] .delete-message-btn i {
@@ -83,6 +84,7 @@
 }
 
 :root[bg-theme='dark'] .copy-button:hover i,
+:root[bg-theme='dark'] .view-button:hover i,
 :root[bg-theme='dark'] .send-button:hover i,
 :root[bg-theme='dark'] .edit-button:hover i {
   color: #90ee90; /* 悬停时将按钮图标颜色设置为绿色 */
@@ -93,6 +95,7 @@
 }
 
 :root[bg-theme='gray'] .copy-button i,
+:root[bg-theme='gray'] .view-button i,
 :root[bg-theme='gray'] .send-button i,
 :root[bg-theme='gray'] .edit-button i,
 :root[bg-theme='gray'] .delete-message-btn i {
@@ -100,6 +103,7 @@
 }
 
 :root[bg-theme='gray'] .copy-button:hover i,
+:root[bg-theme='gray'] .view-button:hover i,
 :root[bg-theme='gray'] .send-button:hover i,
 :root[bg-theme='gray'] .edit-button:hover i {
   color: blue; /* 悬停时将按钮图标颜色设置为蓝色 */
@@ -111,6 +115,7 @@
 
 /* 与主题颜色为 silver 时应用相同的设置 */
 :root[bg-theme='silver'] .copy-button i,
+:root[bg-theme='silver'] .view-button i,
 :root[bg-theme='silver'] .send-button i,
 :root[bg-theme='silver'] .edit-button i,
 :root[bg-theme='silver'] .delete-message-btn i {
@@ -118,6 +123,7 @@
 }
 
 :root[bg-theme='silver'] .copy-button:hover i,
+:root[bg-theme='silver'] .view-button:hover i,
 :root[bg-theme='silver'] .send-button:hover i,
 :root[bg-theme='silver'] .edit-button:hover i {
   color: blue;
@@ -149,6 +155,31 @@
 
 /* 悬停时变色 */
 .copy-button:hover i {
+  color: #000000; /* 悬停时图标颜色变为黑色 */
+}
+
+/* CSS 样式中为查看按钮设置图标 */
+.view-button {
+  display: none; /* 默认隐藏查看按钮 */
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 4px; /* 设置左侧间距为 4px */
+  margin-right: 5.5px; /* 设置右侧间距为 5.5px */
+}
+
+.view-button i {
+  color: #808080; /* 默认图标颜色为灰色 */
+  font-size: 14px; /* 图标大小 */
+}
+
+.message-text.request:hover .view-button,
+.message-text.response:hover .view-button {
+  display: inline-block; /* 鼠标悬停时显示查看按钮 */
+}
+
+/* 悬停时变色 */
+.view-button:hover i {
   color: #000000; /* 悬停时图标颜色变为黑色 */
 }
 
