@@ -1,13 +1,27 @@
 # ChatGPT-website-plus
 
 ## 介绍
-2024.3.1最新更新！！！
+2024.3.7最新更新，新增支持基本所有OpenAI模型！！！
 
 简易版 `ChatGPT` 网站，拿来即用，适合小白，让你十分钟搭建属于自己的 `ChatGPT` 问答机器人！
 
 本项目是`ChatGPT-website`的改进版本。
 
 欢迎点 Star ! 
+## 项目效果
+
+### PC端
+可使用gpt-4,dalle3(可自由选择参数),tts,embedding,moderation,gpt-4-vision-preview等模型！如下使用dalle3画了一张宽图：
+![image](https://github.com/buwanyuanshen/ChatGPT-website-plus/assets/144007759/aaa3e2eb-6322-49c6-868c-3e665fa66d66)
+dalle3图片：
+![image](https://github.com/buwanyuanshen/ChatGPT-website-plus/assets/144007759/92158ecf-cd9f-4f03-8ba2-b93bc700951b)
+图片下载地址：
+[dalle3图片](https://66.ccfgpt.cn/sJU_美丽少女.png)
+
+
+### 手机端
+![image](https://github.com/buwanyuanshen/ChatGPT-website-plus/assets/144007759/c78e568b-a188-4524-b82a-3247f95eda92)
+
 ## 使用说明
 
 1. 下载所有文件到目录下，提前安装python3
@@ -33,17 +47,9 @@
 
 5.其余更新如图：
 ![image](https://github.com/buwanyuanshen/ChatGPT-website-plus/assets/144007759/0fbee449-bfe8-49e5-99ea-78b9997a4dfb)
-
-## 项目效果
-
-### PC端
-![image](https://github.com/buwanyuanshen/ChatGPT-website-plus/assets/144007759/9b144dfb-d8e2-4da3-ada4-3c9c55c34f28)
-![image](https://github.com/buwanyuanshen/ChatGPT-website-plus/assets/144007759/095277ff-9727-42b0-ab8a-59a683a56f6f)
+![image](https://github.com/buwanyuanshen/ChatGPT-website-plus/assets/144007759/eef83fed-dacb-4de1-896f-a5d8f5b92bec)
 
 
 
-
-### 手机端
-![屏幕截图 2024-02-06 231702](https://github.com/buwanyuanshen/ChatGPT-website-plus/assets/144007759/0653a9bc-9891-45c2-8979-9c25d4d86b63)
 
 
