@@ -1,3 +1,49 @@
+$(document).ready(function () {
+    // 监听添加自定义模型按钮点击事件
+    $(".add-custom-model").on("click", function () {
+        // 获取用户输入的自定义模型名称
+        var customModelName = $(".custom-model").val().trim();
+
+        // 确保模型名称非空
+        if (customModelName !== "") {
+            // 检查是否已存在相同模型
+            if ($(".model option[value='" + customModelName + "']").length === 0) {
+                // 添加自定义模型到模型选择下拉框
+                $(".model").append('<option value="' + customModelName + '">' + customModelName + '</option>');
+
+                // 清空输入框
+                $(".custom-model").val("");
+            } else {
+                alert("该模型已存在！");
+            }
+        } else {
+            alert("请输入有效的模型名称！");
+        }
+    });
+
+    // 监听删除自定义模型按钮点击事件
+    $(".delete-custom-model").on("click", function () {
+        // 获取用户输入的自定义模型名称
+        var customModelName = $(".custom-model").val().trim();
+
+        // 确保模型名称非空
+        if (customModelName !== "") {
+            // 检查是否存在相同模型
+            var optionToRemove = $(".model option[value='" + customModelName + "']");
+            if (optionToRemove.length > 0) {
+                // 删除相同模型
+                optionToRemove.remove();
+
+                // 清空输入框
+                $(".custom-model").val("");
+            } else {
+                alert("未找到要删除的模型！");
+            }
+        } else {
+            alert("请输入有效的模型名称！");
+        }
+    });
+});
 // 获取输入框元素和外部容器
 var chatInput = document.getElementById('chatInput');
 var iptContainer = document.querySelector('.ipt');
