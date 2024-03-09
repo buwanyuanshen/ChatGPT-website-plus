@@ -565,7 +565,7 @@ input[type="checkbox"]:checked + .check-trail .check-handler::before {
 .message-bubble .message-text.response{
   width: auto;
   max-width: calc(100% - 45px);
-  font-size: 18px;
+  font-size: 17px;
   margin-left:10px;
   word-break: break-all;
 }
@@ -573,7 +573,7 @@ input[type="checkbox"]:checked + .check-trail .check-handler::before {
 .message-bubble .message-text.request{
   width: auto;
   max-width: calc(100% - 45px);
-  font-size: 18px;
+  font-size: 17px;
   margin-left:10px;
   word-break: break-all;
 }
