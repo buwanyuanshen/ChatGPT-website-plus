@@ -17,7 +17,7 @@ dalle3图片：
 ![image](https://github.com/buwanyuanshen/ChatGPT-website-plus/assets/144007759/92158ecf-cd9f-4f03-8ba2-b93bc700951b)
 
 ## 图片下载地址：
-[dalle3图片下载](https://66.ccfgpt.cn/sJU_美丽少女.png)
+[dalle3图片下载](https://pan.baidu.com/share/init?surl=zSxedE6qrlG-MWryMleFqQ&pwd=6666)
 
 
 
