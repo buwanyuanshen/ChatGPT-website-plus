@@ -1,5 +1,5 @@
 # ChatGPT-website-plus
-# Vercel部署
+## Vercel部署
 2024.3.13新增vercel部署，请前往[ChatGPT-website-vercel](https://github.com/buwanyuanshen/ChatGPT-website-vercel)
 ## 介绍
 2024.3.7最新更新，新增支持基本所有OpenAI模型！！！
@@ -59,7 +59,7 @@ dalle3图片：
 
 ![image](https://github.com/buwanyuanshen/ChatGPT-website-plus/assets/144007759/eef83fed-dacb-4de1-896f-a5d8f5b92bec)
 
-# 截止2024.3.13最新ChatGPT免费使用网址，还在更新中！：
+## 截止2024.3.13最新ChatGPT免费使用网址，还在更新中！：
 1. [Gemini Pro](https://ccfgpt.cn)
 2. [Gemini Plus](https://66.ccf666.cn)
 3. [ChatGPT-3.5-NextWeb](https://ccf666.cn)
