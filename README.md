@@ -1,5 +1,6 @@
 # ChatGPT-website-plus
-
+# Vercel部署
+2024.3.13新增vercel部署，请前往[ChatGPT-website-vercel](https://github.com/buwanyuanshen/ChatGPT-website-vercel)
 ## 介绍
 2024.3.7最新更新，新增支持基本所有OpenAI模型！！！
 
