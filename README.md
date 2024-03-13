@@ -59,7 +59,19 @@ dalle3图片：
 
 ![image](https://github.com/buwanyuanshen/ChatGPT-website-plus/assets/144007759/eef83fed-dacb-4de1-896f-a5d8f5b92bec)
 
-
+# 截止2024.3.13最新ChatGPT免费使用网址，还在更新中！：
+1. [Gemini Pro](https://ccfgpt.cn)
+2. [Gemini Plus](https://66.ccf666.cn)
+3. [ChatGPT-3.5-NextWeb](https://ccf666.cn)
+4. [ChatGPT-3.5](https://6.ccfgpt.cn)
+5. [ChatGPT-Bot](https://supergpt.shop)
+6. [ChatGPT-3.5-16k](https://6.ccf666.cn)
+7. [ChatGPT-4.0-32k](https://66.supergpt.shop)
+8. [ChatGPT-4.0-NextWeb](https://chatpro.icu)
+9. [ChatGPT-4.0-turbo](https://6.chatpro.icu)
+10. [ChatGPT-Plugins](https://6.supergpt.shop)
+11. [ChatGPT-Pro](https://66.chatpro.icu)
+12. 可以加入[q群226848325](https://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=1OOigjF5hxHUSQ5GE5U2UOIwswuckYOe&authKey=2pdTkM0NqehD2OuMojvBMnsmCAUcD6oO3ttDzS5CNle8tnre1a9Jp30aJZVUnC2c&noverify=0&group_code=226848325)学习交流！
 
 
 
