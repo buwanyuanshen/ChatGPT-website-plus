@@ -73,6 +73,6 @@ dalle3图片：
 11. [ChatGPT-Pro](https://66.chatpro.icu)
 12. 可以加入[q群226848325](https://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=1OOigjF5hxHUSQ5GE5U2UOIwswuckYOe&authKey=2pdTkM0NqehD2OuMojvBMnsmCAUcD6oO3ttDzS5CNle8tnre1a9Jp30aJZVUnC2c&noverify=0&group_code=226848325)学习交流！
 ## 其余项目网址
-[chatgpt-website-forward-vercel(前端)](https://github.com/buwanyuanshen/ChatGPT-website-forward-vercel),一键部署有流式。
+[ChatGPT-website-forward-vercel(前端)](https://github.com/buwanyuanshen/ChatGPT-website-forward-vercel),一键部署有流式。
 
 
