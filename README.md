@@ -59,18 +59,18 @@ dalle3图片：
 
 ![image](https://github.com/buwanyuanshen/ChatGPT-website-plus/assets/144007759/eef83fed-dacb-4de1-896f-a5d8f5b92bec)
 
-## 截止2024.3.13最新ChatGPT免费使用网址，还在更新中！：
-1. [Gemini Pro](https://ccfgpt.cn)
-2. [Gemini Plus](https://66.ccf666.cn)
-3. [ChatGPT-3.5-NextWeb](https://ccf666.cn)
-4. [ChatGPT-3.5](https://6.ccfgpt.cn)
-5. [ChatGPT-Bot](https://supergpt.shop)
-6. [ChatGPT-3.5-16k](https://6.ccf666.cn)
-7. [ChatGPT-4.0-32k](https://66.supergpt.shop)
-8. [ChatGPT-4.0-NextWeb](https://chatpro.icu)
-9. [ChatGPT-4.0-turbo](https://6.chatpro.icu)
-10. [ChatGPT-Plugins](https://6.supergpt.shop)
-11. [ChatGPT-Pro](https://66.chatpro.icu)
+# 截止2024.6.10最新ChatGPT免费使用网址，还在更新中！：
+1. ChatGPT-Demo: [ChatGPT-Demo](https://6.chatpro.icu) 
+2. ChatGPT-NextWeb:[ChatGPT-NextWeb](https://chatpro.icu)
+3. ChatGPT FREE:[ChatGPT FREE](https://api.ccfgpt.cn) 
+4. ChatGPT-Lobe:[ChatGPT-Lobe](https://66.chatpro.icu)
+5. Chat-Web:[Chat-Web](https://web.ccf666.cn) 
+6. Chat-MJ:[Chat-MJ](https://mj.chatpro.icu) 
+7. Paint-Web:[Paint-Web](https://paint.ccf666.cn) 
+8. Chat-Plus-Free:[Chat-Plus-Free](https://free.chatpro.icu)
+9. Chat-Plus-New-Charge:[Chat-Plus-New-Charge](https://gpt.chatpro.icu)
+10. Chat-Plus-Old-Charge:[Chat-Plus-Old-Charge](https://gpts.chatpro.icu)
+11. CF API:[CF API](https://api.ccf666.cn)
 12. 可以加入[q群226848325](https://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=1OOigjF5hxHUSQ5GE5U2UOIwswuckYOe&authKey=2pdTkM0NqehD2OuMojvBMnsmCAUcD6oO3ttDzS5CNle8tnre1a9Jp30aJZVUnC2c&noverify=0&group_code=226848325)学习交流！
 ## 其余项目网址
 [ChatGPT-website-forward-vercel(前端)](https://github.com/buwanyuanshen/ChatGPT-website-forward-vercel),一键部署有流式。
