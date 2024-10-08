@@ -1,4 +1,33 @@
 $(document).ready(function () {
+        // Function to detect links
+    function containsLink(input) {
+        const urlRegex = /(https?:\/\/[^\s]+)/g;
+        return urlRegex.test(input);
+    }
+
+    // Existing input event listener for dynamic resizing
+    chatInput.addEventListener('input', function () {
+        // Save the current scroll height
+        var currentScrollHeight = chatInput.scrollHeight;
+
+        // Adjust the height of the input box
+        chatInput.style.height = 'auto';
+        chatInput.style.height = (Math.min(maxHeight, chatInput.scrollHeight)) + 'px';
+
+        // Set the height of the outer container
+        iptContainer.style.height = (Math.min(maxHeight, chatInput.scrollHeight) + 20) + 'px';
+
+        // Restore the scroll height to prevent flickering
+        chatInput.scrollTop = currentScrollHeight;
+
+        // Check if the input contains a link
+        if (containsLink(chatInput.value)) {
+            // Disable continuous dialogue
+            $("#chck-2").prop("checked", false);
+            localStorage.setItem('continuousDialogue', false);
+        }
+    });
+    
     // 读取本地存储中的模型列表，并初始化模型选择下拉框
     var savedModels = localStorage.getItem('customModels');
     if (savedModels) {
@@ -62,6 +91,7 @@ $(document).ready(function () {
         localStorage.setItem('customModels', modelsHtml);
     }
 });
+
 
 // 获取输入框元素和外部容器
 var chatInput = document.getElementById('chatInput');
@@ -298,18 +328,6 @@ function resendMessage(message) {
     data.api_url = api_url;
   }
 
-  // 判断是否开启连续对话
-  data.prompts = messages.slice(); // 拷贝一份全局 messages 赋值给 data.prompts,然后对 data.prompts 处理
-  if (localStorage.getItem('continuousDialogue') == 'true') {
-    // 控制上下文，对话长度超过4轮，取最新的3轮,即数组最后7条数据
-    if (data.prompts.length > 8) {
-      data.prompts.splice(0, data.prompts.length - 7);
-    }
-  } else {
-    data.prompts.splice(0, data.prompts.length - 1); // 未开启连续对话，取最后一条
-  }
-  data.prompts = JSON.stringify(data.prompts);
-
   // 发送信息到后台
   $.ajax({
     url: '/chat',
@@ -398,32 +416,63 @@ function addResponseMessage(message) {
     }
   }
 
-  if (message.includes('https://')) {
-    // 使用正则表达式提取链接
-    const urlRegex = /(https?:\/\/[^\s]+)/g;
-    const urls = message.match(urlRegex);
+if (message.includes('Unexpected data format:')) {
+  // 从消息中提取 JSON 类似的字符串
+  const dataString = message.split('Unexpected data format: ')[1].trim();
+
+  // 将单引号替换为双引号，形成有效的 JSON
+  const jsonString = dataString.replace(/'/g, '"');
+
+  try {
+    const dataObject = JSON.parse(jsonString);
+    const urls = dataObject.data.map(item => item.url);
 
     if (urls && urls.length > 0) {
-      // 获取第一个链接，并将其添加到img标签中
-      const imageUrl = urls[0];
-      lastResponseElement.append('<div class="message-text">' + '<img src="' + imageUrl + '" style="max-width: 25%; max-height: 25%;" alt="messages"> ' + '</div>' + '<button class="view-button"><i class="fas fa-search"></i></button>' + '<button class="delete-message-btn"><i class="far fa-trash-alt"></i></button>');
-
+      let imagesHtml = '';
+      urls.forEach(url => {
+        imagesHtml += '<img src="' + url + '" style="max-width: 35%; max-height: 35%;" alt="messages"> ';
+      });
+      lastResponseElement.append('<div class="message-text">' + escapedMessage + imagesHtml + '</div>' + '<button class="view-button"><i class="fas fa-search"></i></button>' + '<button class="delete-message-btn"><i class="far fa-trash-alt"></i></button>');
     }
-  } else if (message.startsWith('"//')) {
-    // 处理包含base64编码的音频
-    const base64Data = message.replace(/"/g, '');
-    lastResponseElement.append('<div class="message-text">' + '<audio controls=""><source src="data:audio/mpeg;base64,' + base64Data + '" type="audio/mpeg"></audio> ' + '</div>' + '<button class="delete-message-btn"><i class="far fa-trash-alt"></i></button>');
-  } 
-else if (message.startsWith('//')) {
-    // 处理包含base64编码的音频
-    const base64Data = message
-    lastResponseElement.append('<div class="message-text">' + '<audio controls=""><source src="data:audio/mpeg;base64,' + base64Data + '" type="audio/mpeg"></audio> ' + '</div>' + '<button class="delete-message-btn"><i class="far fa-trash-alt"></i></button>');
-  } 
-else {
-    lastResponseElement.append('<div class="message-text">' + escapedMessage + '</div>' + '<button class="copy-button"><i class="far fa-copy"></i></button>' + '<button class="delete-message-btn"><i class="far fa-trash-alt"></i></button>');
+  } catch (error) {
+    console.error('JSON 解析错误:', error);
+    // 如果解析失败，回退到正则表达式方法
   }
+} else if (message.includes('https://')) {
+  // 使用改进的正则表达式方法作为回退
+  const urlRegex = /(https?:\/\/[^\s'"<>\]\}]+?\.(png|jpg|jpeg|gif))/gi;
+  const urls = message.match(urlRegex);
 
-  chatWindow.scrollTop(chatWindow.prop('scrollHeight'));
+  if (urls && urls.length > 0) {
+    let imagesHtml = '';
+    urls.forEach(url => {
+      imagesHtml += '<img src="' + url + '" style="max-width: 35%; max-height: 35%;" alt="messages"> ';
+    });
+    lastResponseElement.append('<div class="message-text">' + escapedMessage + imagesHtml + '</div>' + '<button class="view-button"><i class="fas fa-search"></i></button>' + '<button class="delete-message-btn"><i class="far fa-trash-alt"></i></button>');
+  }
+} else if (message.startsWith('"//')) {
+  // 处理包含base64编码的音频
+  const base64Data = message.replace(/"/g, '');
+  lastResponseElement.append('<div class="message-text">' + '<audio controls=""><source src="data:audio/mpeg;base64,' + base64Data + '" type="audio/mpeg"></audio> ' + '</div>' + '<button class="delete-message-btn"><i class="far fa-trash-alt"></i></button>');
+} else if (message.startsWith('//')) {
+  // 处理包含base64编码的音频
+  const base64Data = message;
+  lastResponseElement.append('<div class="message-text">' + '<audio controls=""><source src="data:audio/mpeg;base64,' + base64Data + '" type="audio/mpeg"></audio> ' + '</div>' + '<button class="delete-message-btn"><i class="far fa-trash-alt"></i></button>');
+} else {
+  lastResponseElement.append('<div class="message-text">' + escapedMessage + '</div>' + '<button class="copy-button"><i class="far fa-copy"></i></button>' + '<button class="delete-message-btn"><i class="far fa-trash-alt"></i></button>');
+}
+
+chatWindow.scrollTop(chatWindow.prop('scrollHeight'));
+
+
+
+
+
+
+
+
+
+
 
 // 绑定查看按钮事件
 $('.view-button').on('click', function() {
@@ -530,6 +579,7 @@ chatBtn.click(function() {
     // 将用户消息保存到数组
     messages.push({"role": "user", "content": message});
 
+
     if (messages.length > 40) {
         addFailMessage("此次对话长度过长，请点击下方删除按钮清除对话内容！");
         // 重新绑定键盘事件
@@ -617,17 +667,29 @@ $('.stop a').click(function() {
   $(this).closest('.stop').hide();
 });
 
+
 // Enter键盘事件
-function handleEnter(e){
-  // 判断同时按下Ctrl键和Enter键
-  if (e.ctrlKey && e.keyCode == 13){
+function handleEnter(e) {
+  // 如果是电脑端，判断同时按下Ctrl键和Enter键
+  if (!isMobile() && e.ctrlKey && e.keyCode == 13) {
+    chatBtn.click();
+    e.preventDefault();  //避免回车换行
+  }
+  // 如果是手机端，直接按下Enter键发送
+  else if (isMobile() && e.keyCode == 13) {
     chatBtn.click();
     e.preventDefault();  //避免回车换行
   }
 }
 
-// 绑定Ctrl + Enter键盘事件
+// 绑定键盘事件
 chatInput.on("keydown", handleEnter);
+
+// 判断是否是移动端
+function isMobile() {
+  // 使用适当的移动设备检测逻辑，这里简单地检查是否小于某个屏幕宽度
+  return window.innerWidth <= 768; // 这里假设小于等于768像素的宽度是移动端
+}
 
 
   // 设置栏宽度自适应
@@ -725,18 +787,22 @@ function checkAndSetContinuousDialogue(modelName) {
     const hasCompletion1 = modelName.toLowerCase().includes("gpt-3.5-turbo-instruct");
     const hasCompletion2 = modelName.toLowerCase().includes("babbage-002");
     const hasCompletion3 = modelName.toLowerCase().includes("davinci-002");
-    const hasTextem = modelName.toLowerCase().includes("text-embedding");
-    const hasTextmo = modelName.toLowerCase().includes("text-moderation");
+    const hasTextem = modelName.toLowerCase().includes("embedding");
+    const hasTextmo = modelName.toLowerCase().includes("moderation");
     const hasDALL = modelName.toLowerCase().includes("dall");
-    const hasVs = modelName.toLowerCase().includes("gpt-4-vision-preview");
-    const isContinuousDialogueEnabled = !(hasTTS || hasDALL || hasCompletion1 || hasCompletion2 || hasCompletion3 || hasTextem || hasTextmo || hasVs);
+    const hasVs = modelName.toLowerCase().includes("v");
+    const hasMj = modelName.toLowerCase().includes("midjourney");
+    const hasSD = modelName.toLowerCase().includes("stable");
+    const hasFlux = modelName.toLowerCase().includes("flux");
+    const hasVd = modelName.toLowerCase().includes("video");
+    const isContinuousDialogueEnabled = !(hasTTS || hasDALL || hasCompletion1 || hasCompletion2 || hasCompletion3 || hasTextem || hasTextmo || hasVs || hasMj || hasSD || hasFlux || hasVd);
 
     // 设置连续对话状态
     $("#chck-2").prop("checked", isContinuousDialogueEnabled);
     localStorage.setItem('continuousDialogue', isContinuousDialogueEnabled);
 
     // 设置是否禁用checkbox
-    $("#chck-2").prop("disabled", hasTTS || hasDALL || hasCompletion1 || hasCompletion2 || hasCompletion3 || hasTextem || hasTextmo || hasVs);
+    $("#chck-2").prop("disabled", hasTTS || hasCompletion1 || hasCompletion2 || hasCompletion3 || hasTextem || hasTextmo || hasVs || hasMj || hasSD || hasFlux || hasVd);
 
     // 获取上一个模型名称
     const previousModel = localStorage.getItem('previousModel') || "";
@@ -745,11 +811,16 @@ function checkAndSetContinuousDialogue(modelName) {
     const hadCompletion1 = previousModel.toLowerCase().includes("gpt-3.5-turbo-instruct");
     const hadCompletion2 = previousModel.toLowerCase().includes("babbage-002");
     const hadCompletion3= previousModel.toLowerCase().includes("davinci-002");
-    const hadTextem = previousModel.toLowerCase().includes("text-embedding");
-    const hadTextmo = previousModel.toLowerCase().includes("text-moderation");
-    const hadVs = previousModel.toLowerCase().includes("gpt-4-vision-preview");
+    const hadTextem = previousModel.toLowerCase().includes("embedding");
+    const hadTextmo = previousModel.toLowerCase().includes("moderation");
+    const hadVs = previousModel.toLowerCase().includes("v");
+    const hadMj = previousModel.toLowerCase().includes("midjourney");
+    const hadSD = previousModel.toLowerCase().includes("stable");
+    const hadFlux = previousModel.toLowerCase().includes("flux");
+    const hadVd = previousModel.toLowerCase().includes("video");
+
     // 如果从包含tts或dall的模型切换到不包含这些的模型，清除对话
-    if ((hadTTS || hadDALL || hadCompletion1 || hadCompletion2 || hadCompletion3 || hadTextem || hadTextmo || hadVs) && !(hasTTS || hasDALL || hasCompletion1 || hasCompletion2 || hasCompletion3 || hasTextem || hasTextmo|| hasVs)) {
+    if ((hadTTS || hadDALL || hadCompletion1 || hadCompletion2 || hadCompletion3 || hadTextem || hadTextmo || hadVs || hadMj || hadSD || hadFlux || hadVd) && !(hasTTS || hasDALL || hasCompletion1 || hasCompletion2 || hasCompletion3 || hasTextem || hasTextmo|| hasVs || hasMj || hasSD || hasFlux || hasVd)) {
         clearConversation();
     }
 
@@ -761,6 +832,8 @@ function checkAndSetContinuousDialogue(modelName) {
 if (selectedModel) {
     $(".settings-common .model").val(selectedModel);
     checkAndSetContinuousDialogue(selectedModel);
+    // Update the title to use the selected option's text instead of its value
+    $(".title h2").text($(".settings-common .model option:selected").text());
 }
 
 // 监听model选择的变化
@@ -768,7 +841,10 @@ $('.settings-common .model').change(function() {
     const selectedModel = $(this).val();
     localStorage.setItem('selectedModel', selectedModel);
     checkAndSetContinuousDialogue(selectedModel);
+    // Update the title to use the selected option's text instead of its value
+    $(".title h2").text($(this).find("option:selected").text());
 });
+
 
 // 删除对话
 function clearConversation() {
@@ -828,7 +904,7 @@ $(".delete a").click(function(){
 
   // 初始化archiveSession
   if(archiveSession == null){
-    archiveSession = "false";
+    archiveSession = "true";
     localStorage.setItem('archiveSession', archiveSession);
   }
   
