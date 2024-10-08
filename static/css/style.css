@@ -648,7 +648,7 @@ input[type="checkbox"]:checked + .check-trail .check-handler::before {
 
 .answer .others .common.settings {
     position: absolute;
-    top: 85%;
+    top: 75%;
     transform: translateY(-50%);
     left: -15px; /* 调整左侧距离 */
     z-index: 1; /* 将设置按钮置于输入框上层 */
