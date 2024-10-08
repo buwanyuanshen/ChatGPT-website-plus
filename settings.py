@@ -55,5 +55,19 @@ API_KEYS5 = [
 # openAi 代理 api5（用于gpt4模型，对应app.py中第5个授权码)
 API_URL5 = "https://api.openai-proxy.com"
 
+# openAi api key6（用于gpt4模型，对应app.py中第6个授权码）
+API_KEYS6 = [
+    "sk-",
+    "sk-",
+]
+# openAi 代理 api6（用于gpt4模型，对应app.py中第6个授权码)
+API_URL6 = "https://api.openai-proxy.com"
 
+# openAi api key7（用于gpt-gizmo模型）
+API_KEYS7 = [
+    "sk-",
+    "sk-",
+]
+# openAi 代理 api7（用于gpt-gizmo模型)
+API_URL7 = "https://api.openai-proxy.com"
 #  ............
