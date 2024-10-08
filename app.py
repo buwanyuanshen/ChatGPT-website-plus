@@ -1,4 +1,5 @@
-# -*- coding: utf-8 -*-
+  # -*- coding: utf-8 -*-
+from datetime import datetime
 from flask import Flask, request, jsonify, render_template, Response
 import requests
 import json
@@ -23,30 +24,52 @@ def chat():
     global user_text
     messages = request.form.get("prompts", None)
     apiKey = request.form.get("apiKey", None)
-    model = request.form.get("model", "gpt-3.5-turbo-0125")
+    model = request.form.get("model", "gpt-4o-mini")
     temperature = request.form.get("temperature", 0.5)
     max_tokens = request.form.get("max_tokens", 4000)
     password = request.form.get("password", None)
     api_url = request.form.get("api_url", None)
+    # 获取当前日期和时间
+    current_time = datetime.now().strftime("%Y年%m月%d日%H:%M:%S")
+
+    # 获取当前日期
+    current_date = datetime.now().strftime("%Y.%m.%d")
+
+    # 获取当前脚本所在目录
+    current_directory = os.path.dirname(os.path.realpath(__file__))
+    # 构建文件夹路径
+    folder_path = os.path.join(current_directory, "对话记录")
+
+    # 如果对话记录文件夹不存在，则创建它
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
+
+    # 构建文件保存路径
+    file_name = f"{current_date}.txt"
+    file_path = os.path.join(folder_path, file_name)
+
+    # 将用户输入的message和model以及时间保存到一个文件
+    with open(file_path, "a", encoding="utf-8") as all_info_file:
+        all_info_file.write(f"Time: {current_time}\nModel: {model}\nApiKey: {apiKey}\nApi_url: {api_url}\nMessage: {messages}\n\n")
 
     if api_url is None:
         api_url = app.config.get("API_URL", None)
 
     # 如果模型不包含"gpt-4"和"dall-e-3"，使用默认的API_KEYS
     if apiKey is None:
-        if "gpt-4" not in model and "dall-e-3" not in model:
+       if "gpt-4" not in model and "dall" not in model and "claude" not in model and "SparkDesk" not in model and "gemini" not in model and "o1" not in model and "chatgpt" not in model and "embedding" not in model and "moderation" not in model and "glm" not in model and "yi" not in model and "commmand" not in model and "stable" not in model and "deep" not in model and "midjourney" not in model and "douubao" not in model and "qwen" not in model and "co" not in model and "suno" not in model and "abab" not in model and "chat" not in model:
             api_keys = app.config.get("API_KEYS", [])
             apiKey = os.environ.get('OPENAI_API_KEY', random.choice(api_keys))
 
     # 如果模型包含"gpt-4"或者dall-e-3，密码错误则返回错误！
     if apiKey is None:
-        if "gpt-4" in model or "dall-e-3" in model:
+        if "gpt-4" in model or "dall" in model or "claude" in model or "SparkDesk" in model or "gemini" in model or "o1" in model or "chatgpt" in model or "embedding" in model or "moderation" in model or "glm" in model or "yi" in model or "commmand" in model or "stable" in model or "deep" in model or "midjourney" in model or "douubao" in model or "qwen" in model or "co" in model or "suno" in model or "abab" in model or "chat" in model:
             if not password:
                 return jsonify({"error": {"message": "请联系群主获取授权码或者输入自己的apikey！！！",
                                           "type": "empty_password_error", "code": ""}})
     if apiKey is None:
-        if "gpt-4" in model or "dall-e-3" in model:
-            if password not in ["授权码1", "授权码2", "授权码3", "授权码4", "授权码5"]:
+        if "gpt-4" in model or "dall" in model or "claude" in model or "SparkDesk" in model or "gemini" in model or "o1" in model or "chatgpt" in model or "embedding" in model or "moderation" in model or "glm" in model or "yi" in model or "commmand" in model or "stable" in model or "deep" in model or "midjourney" in model or "douubao" in model or "qwen" in model or "co" in model or "suno" in model or "abab" in model or "chat" in model:
+            if password not in ["密码1", "密码2", "密码3", "密码4", "密码5","密码6"]:
                 return jsonify({
                     "error": {
                         "message": "请检查并输入正确的授权码或者输入自己的apikey！！！",
@@ -56,29 +79,38 @@ def chat():
                 })
 
     if apiKey is None:
-        if "gpt-4" in model or "dall-e-3" in model:
-            if password == "授权码1":
+        if "gpt-4" in model or "dall" in model or "claude" in model or "SparkDesk" in model or "gemini" in model or "o1" in model or "chatgpt" in model or "embedding" in model or "moderation" in model or "glm" in model or "yi" in model or "commmand" in model or "stable" in model or "deep" in model or "midjourney" in model or "douubao" in model or "qwen" in model or "co" in model or "suno" in model or "abab" in model or "chat" in model:
+            if password == "密码1":
                 api_keys = app.config.get("API_KEYS1", [])
                 apiKey = os.environ.get('OPENAI_API_KEY', random.choice(api_keys))
                 api_url = app.config.get("API_URL1", None)
             else:
-                if password == "授权码2":
+                if password == "密码2":
                     api_keys = app.config.get("API_KEYS2", [])
                     apiKey = os.environ.get('OPENAI_API_KEY', random.choice(api_keys))
                     api_url = app.config.get("API_URL2", None)
-                elif password == "授权码3":
+                elif password == "密码3":
                     api_keys = app.config.get("API_KEYS3", [])
                     apiKey = os.environ.get('OPENAI_API_KEY', random.choice(api_keys))
                     api_url = app.config.get("API_URL3", None)
-                elif password == "授权码4":
+                elif password == "密码4":
                     api_keys = app.config.get("API_KEYS4", [])
                     apiKey = os.environ.get('OPENAI_API_KEY', random.choice(api_keys))
                     api_url = app.config.get("API_URL4", None)
-                elif password == "授权码5":
+                elif password == "密码5":
                     api_keys = app.config.get("API_KEYS5", [])
                     apiKey = os.environ.get('OPENAI_API_KEY', random.choice(api_keys))
                     api_url = app.config.get("API_URL5", None)
-
+                elif password == "密码6":
+                    api_keys = app.config.get("API_KEYS6", [])
+                    apiKey = os.environ.get('OPENAI_API_KEY', random.choice(api_keys))
+                    api_url = app.config.get("API_URL6", None)
+    if apiKey is None:
+        if password not in ["密码1", "密码2", "密码3", "密码4", "密码5","密码6"]:
+            if "gizmo" in model:
+                api_keys = app.config.get("API_KEYS7", [])
+                apiKey = os.environ.get('OPENAI_API_KEY', random.choice(api_keys))
+                api_url = app.config.get("API_URL7", None)
     # 如果模型包含 "xxx"，更换对应的api_url和data
     if model == "dall-e-2":
         api_url += "/v1/images/generations"
@@ -224,13 +256,27 @@ def chat():
             "quality": "hd",
             "style": "vivid",
         }
-    elif "text-moderation" in model:
+    elif model == "cogview-3":
+        api_url += "/v1/images/generations"
+        data = {
+            "model": "cogview-3",
+            "prompt": messages,
+            "size": "1024x1024",
+        }
+    elif model == "cogview-3-plus":
+        api_url += "/v1/images/generations"
+        data = {
+            "model": "cogview-3-plus",
+            "prompt": messages,
+            "size": "1024x1024",
+        }
+    elif "moderation" in model:
         api_url += "/v1/moderations"
         data = {
             "input": messages,
             "model": model,
         }
-    elif "text-embedding" in model:
+    elif "embedding" in model:
         api_url += "/v1/embeddings"
         data = {
             "input": messages,
@@ -255,74 +301,111 @@ def chat():
             "n": 1,
             "stream": True,
         }
-    elif model == "gpt-4-vision-preview":
-        image_url_match = re.search(r'https://\S+,', messages)
-        image_url = image_url_match.group().strip(",") if image_url_match else None
 
-        try:
-            messages = json.loads(messages)
-        except json.JSONDecodeError as e:
-            print(f"Error decoding JSON: {e}")
-
-        # Extract URL and content using regex
-        regex_pattern = r"https://[^,]+,(.+)"
-
-        for message in messages:
-            if isinstance(message, dict):
-                content = message.get("content", "")
-            elif isinstance(message, str):
-                try:
-                    message_dict = json.loads(message)
-                    content = message_dict.get("content", "")
-                except json.JSONDecodeError as e:
-                    print(f"Error decoding JSON in message: {e}")
-                    content = ""
-            else:
-                content = ""
-
-            match = re.search(regex_pattern, content)
-
-            if match:
-                user_text = match.group(1)
-
-        api_url += "/v1/chat/completions"
-        data = {
-            "messages": [
-                {
-                    "role": "user",
-                    "content": [
-                        {"type": "text", "text": user_text},
+    elif model == "gpt-4o" or "vision" in model or "glm-4v" in model or "glm-4v-plus" in model or model == "gpt-4o-2024-05-13" or model == "gpt-4o-2024-08-06" or model == "chatgpt-4o-latest" or "claude-3" in model or model == "gpt-4o-mini" or model == "gpt-4o-mini-2024-07-18" or "gemini-1.5" in model: 
+        if ',' not in messages and '，' not in messages:
+            api_url += "/v1/chat/completions"
+            data = {
+                "messages": json.loads(messages),
+                "model": model,
+                "max_tokens": int(max_tokens),
+                "temperature": float(temperature),
+                "top_p": 1,
+                "n": 1,
+                "stream": True,
+            }
+        else:
+            # 尝试从消息中提取链接和用户文本
+            image_url_match = re.search(r'https://\S+[,，]', messages)
+            image_url = image_url_match.group().strip(",，") if image_url_match else None
+            
+            try:
+                messages_list = json.loads(messages)
+            except json.JSONDecodeError as e:
+                print(f"Error decoding JSON: {e}")
+                messages_list = []
+    
+            user_text = ""
+            for message in messages_list:
+                content = message.get("content", "") if isinstance(message, dict) else ""
+                if not content and isinstance(message, str):
+                    try:
+                        message_dict = json.loads(message)
+                        content = message_dict.get("content", "")
+                    except json.JSONDecodeError as e:
+                        print(f"Error decoding JSON in message: {e}")
+                
+                # 提取用户文本，忽略链接前是否有逗号
+                if content:
+                    match = re.search(r"(https://\S+)?[,，](.+)", content)
+                    if match:
+                        user_text = match.group(2)
+                    else:
+                        user_text = content
+    
+            if image_url:
+                api_url += "/v1/chat/completions"
+                data = {
+                    "messages": [
                         {
-                            "type": "image_url",
-                            "image_url": {
-                                "url":
-                                    image_url,
-                            },
-                        },
+                            "role": "user",
+                            "content": [
+                                {"type": "text", "text": user_text},
+                                {
+                                    "type": "image_url",
+                                    "image_url": {"url": image_url},
+                                },
+                            ],
+                        }
                     ],
+                    "model": model,
+                    "max_tokens": int(max_tokens),
+                    "stream": True,
                 }
-            ],
-            "model": model,
-            "max_tokens": int(max_tokens),
-        }
-    else:
-        # 对于其他模型，使用原有 api_url
+            else:
+                api_url += "/v1/chat/completions"
+                data = {
+                    "messages": json.loads(messages),
+                    "model": model,
+                    "max_tokens": int(max_tokens),
+                    "temperature": float(temperature),
+                    "top_p": 1,
+                    "n": 1,
+                    "stream": True,
+                }
+    elif "o1" in model and "all" not in model:
         api_url += "/v1/chat/completions"
         data = {
-            "messages": json.loads(messages),
-            "model": model,
-            "max_tokens": int(max_tokens),
-            "temperature": float(temperature),
-            "top_p": 1,
-            "n": 1,
-            "stream": True,
+                    "messages": json.loads(messages),
+                    "model": model,
+                    "max_tokens": int(max_tokens),
+                    "temperature": 1,
+                    "top_p": 1,
+                    "n": 1,
         }
+                   
+    else:
+            # 对于其他模型，使用原有 api_url
+            api_url += "/v1/chat/completions"
+            data = {
+                "messages": json.loads(messages),
+                "model": model,
+                "max_tokens": int(max_tokens),
+                "temperature": float(temperature),
+                "top_p": 1,
+                "n": 1,
+                "stream": True,
+            }
+
+
+    # Ensure data is not None before making the request
+    if data is None:
+        return jsonify({"error": {"message": "Unable to process the request.", "type": "data_error", "code": ""}})
 
     headers = {
         "Content-Type": "application/json",
         "Authorization": f"Bearer {apiKey}",
     }
-
     try:
         resp = requests.post(
             url=api_url,
@@ -335,7 +418,7 @@ def chat():
         return jsonify({"error": {"message": "Request timeout", "type": "timeout_error", "code": ""}})
     except Exception as e:
         return jsonify({"error": {"message": str(e), "type": "unexpected_error", "code": ""}})
-
+        
     # 接收图片url
     if "dall-e" in model:
         response_data = json.loads(resp.content.decode('utf-8'))
@@ -355,29 +438,74 @@ def chat():
                 "有害标记": result["flagged"],
                 "违规类别": {
                     "仇恨": result["categories"]["hate"],
-                    "威胁性仇恨": result["categories"]["hate/threatening"],
+                    "仇恨/威胁性": result["categories"]["hate/threatening"],
                     "骚扰": result["categories"]["harassment"],
-                    "威胁性骚扰": result["categories"]["harassment/threatening"],
+                    "骚扰/威胁性": result["categories"]["harassment/threatening"],
                     "自残": result["categories"]["self-harm"],
-                    "自残意图": result["categories"]["self-harm/intent"],
-                    "自残说明": result["categories"]["self-harm/instructions"],
+                    "自残/意图": result["categories"]["self-harm/intent"],
+                    "自残/说明": result["categories"]["self-harm/instructions"],
                     "性内容": result["categories"]["sexual"],
-                    "未成年人性内容": result["categories"]["sexual/minors"],
+                    "性内容/未成年": result["categories"]["sexual/minors"],
                     "暴力": result["categories"]["violence"],
-                    "图文暴力": result["categories"]["violence/graphic"]
+                    "暴力/图文": result["categories"]["violence/graphic"]
                 },
                 "违规类别分数(越大置信度越高)": {
                     "仇恨分数": result["category_scores"]["hate"],
-                    "威胁性仇恨分数": result["category_scores"]["hate/threatening"],
+                    "仇恨分数/威胁性": result["category_scores"]["hate/threatening"],
                     "骚扰分数": result["category_scores"]["harassment"],
-                    "威胁性骚扰分数": result["category_scores"]["harassment/threatening"],
+                    "骚扰分数/威胁性": result["category_scores"]["harassment/threatening"],
                     "自残分数": result["category_scores"]["self-harm"],
-                    "自残意图分数": result["category_scores"]["self-harm/intent"],
-                    "自残说明分数": result["category_scores"]["self-harm/instructions"],
+                    "自残分数/意图": result["category_scores"]["self-harm/intent"],
+                    "自残分数/说明": result["category_scores"]["self-harm/instructions"],
                     "性内容分数": result["category_scores"]["sexual"],
-                    "未成年人性内容分数": result["category_scores"]["sexual/minors"],
+                    "性内容分数/未成年": result["category_scores"]["sexual/minors"],
                     "暴力分数": result["category_scores"]["violence"],
-                    "图文暴力分数": result["category_scores"]["violence/graphic"]
+                    "暴力分数/图文": result["category_scores"]["violence/graphic"]
+                },
+            }
+            result_list.append(result_data)
+
+        # 返回包含所有结果的列表，并将其转换为可读的字符串
+        return json.dumps(result_list, ensure_ascii=False)
+    # text-moderation，接收审查结果
+    if "omni-moderation" in model:
+        response_data = json.loads(resp.content.decode('utf-8'))
+        moderation_results = response_data["results"]
+
+        # 提取每个结果的内容并按顺序存储在列表中
+        result_list = []
+        for result in moderation_results:
+            result_data = {
+                "有害标记": result["flagged"],
+                "违规类别": {
+                    "非法": result["categories"]["illicit"],
+                    "非法/暴力": result["categories"]["illicit/violent"],
+                    "仇恨": result["categories"]["hate"],
+                    "仇恨/威胁性": result["categories"]["hate/threatening"],
+                    "骚扰": result["categories"]["harassment"],
+                    "骚扰/威胁性": result["categories"]["harassment/threatening"],
+                    "自残": result["categories"]["self-harm"],
+                    "自残/意图": result["categories"]["self-harm/intent"],
+                    "自残/说明": result["categories"]["self-harm/instructions"],
+                    "性内容": result["categories"]["sexual"],
+                    "性内容/未成年": result["categories"]["sexual/minors"],
+                    "暴力": result["categories"]["violence"],
+                    "暴力/图文": result["categories"]["violence/graphic"]
+                },
+                "违规类别分数(越大置信度越高)": {
+                    "非法": result["category_scores"]["illicit"],
+                    "非法/暴力": result["category_scores"]["illicit/violent"],
+                    "仇恨分数": result["category_scores"]["hate"],
+                    "仇恨分数/威胁性": result["category_scores"]["hate/threatening"],
+                    "骚扰分数": result["category_scores"]["harassment"],
+                    "骚扰分数/威胁性": result["category_scores"]["harassment/threatening"],
+                    "自残分数": result["category_scores"]["self-harm"],
+                    "自残分数/意图": result["category_scores"]["self-harm/intent"],
+                    "自残分数/说明": result["category_scores"]["self-harm/instructions"],
+                    "性内容分数": result["category_scores"]["sexual"],
+                    "性内容分数/未成年": result["category_scores"]["sexual/minors"],
+                    "暴力分数": result["category_scores"]["violence"],
+                    "暴力分数/图文": result["category_scores"]["violence/graphic"]
                 },
             }
             result_list.append(result_data)
@@ -386,17 +514,10 @@ def chat():
         return json.dumps(result_list, ensure_ascii=False)
 
     # text-embedding，接收多维数组
-    if "text-embedding" in model:
+    if "embedding" in model:
         response_data = json.loads(resp.content.decode('utf-8'))
         embedding = response_data["data"][0]["embedding"]
         return jsonify(embedding)
-
-    # 图像识别
-    if "gpt-4-vision-preview" in model:
-        # 在解析响应数据后
-        response_data = json.loads(resp.content.decode('utf-8'))
-        vs = response_data["choices"][0]["message"]["content"]
-        return json.dumps(vs, ensure_ascii=False).strip('"').replace('\\n', '')
 
     # 在TTS模型的情况下，返回base64编码的音频数据
     if "tts-1" in model:
@@ -407,37 +528,45 @@ def chat():
     # gpt模型回复接收
     def generate():
         errorStr = ""
+        respStr = ""
         for chunk in resp.iter_lines():
             if chunk:
                 streamStr = chunk.decode("utf-8").replace("data: ", "")
                 try:
                     streamStr = streamStr.strip("[DONE]")
+                    print(streamStr)
                     streamDict = json.loads(streamStr)
-                except:
+                    print(streamDict)
+                except json.JSONDecodeError:
                     errorStr += streamStr.strip()
                     continue
 
                 if "choices" in streamDict:
-                    delData = streamDict["choices"][0]
-                    if "finish_reason" in delData and delData["finish_reason"] is not None:
-                        break
+                    if streamDict["choices"]:
+                        delData = streamDict["choices"][0]
+                        print(delData)
+                        if streamDict.get("model") is None:
+                            break
+                        else:
+                            if "text" in delData:
+                                respStr = delData["text"]
+                                yield respStr
+                            elif "delta" in delData and "content" in delData["delta"]:
+                                respStr = delData["delta"]["content"]
+                                yield respStr
+                            elif "message" in delData and "content" in delData["message"]:
+                                respStr = delData["message"]["content"]
+                                yield respStr
                     else:
-                        if "text" in delData:
-                            respStr = delData["text"]
-                            yield respStr
-                        # 添加下面这段代码以处理包含 "delta" 的新返回数据格式
-                        elif "delta" in delData and "content" in delData["delta"]:
-                            respStr = delData["delta"]["content"]
-                            yield respStr
+                        errorStr += f"Empty choices in data: {streamDict}\n"
                 else:
-                    errorStr += f"Unexpected data format: {streamDict}"
+                    errorStr += f"Unexpected data format: {streamDict}\n"
 
-        if errorStr != "":
+        if not respStr and errorStr:
             with app.app_context():
                 yield errorStr
 
     return Response(generate(), content_type='application/octet-stream')
-
 
 if __name__ == '__main__':
     app.run('0.0.0.0', 80)
