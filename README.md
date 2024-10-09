@@ -13,7 +13,7 @@
 
 ### PC端
 #### 可使用gpt-4,dalle3(可自由选择参数),tts,embedding,moderation,gpt-4-vision-preview等模型！如下图：
-![image](https://img.picgo.net/2024/10/10/Screenshot_2024-10-10-00-22-37-002_com.android.browserbf2934c314d0e8dc.jpghttps://img.picgo.net/2024/10/10/IMG_20241010_002703bb34b11cdc27e7e7.jpg)
+![image](https://img.picgo.net/2024/10/10/IMG_20241010_0032501b5464e2bc7ac651.jpg)
 
 ## 图片下载地址：
 [dalle3图片下载](https://pan.baidu.com/share/init?surl=zSxedE6qrlG-MWryMleFqQ&pwd=6666)
