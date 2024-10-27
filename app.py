@@ -1,5 +1,5 @@
   # -*- coding: utf-8 -*-
-from datetime import datetime
+from datetime import datetime,timedelta 
 from flask import Flask, request, jsonify, render_template, Response
 import requests
 import json
@@ -17,6 +17,49 @@ app.config.from_pyfile('settings.py')
 @app.route("/", methods=["GET"])
 def index():
     return render_template("chat.html")
+@app.route("/default_balance", methods=["GET"])
+def get_default_balance():
+    # 从配置文件中获取默认的 API_KEY 和 API_URL
+    api_keys = app.config.get("API_KEYS1", [])
+    apiKey = os.environ.get('OPENAI_API_KEY', random.choice(api_keys))
+    apiUrl = app.config.get("API_URL1", None)
+
+    # 如果默认的 apiKey 或 apiUrl 为空，返回错误信息
+    if not apiKey or not apiUrl:
+        return jsonify({"error": {"message": "No default API key or URL set", "type": "config_error", "code": ""}})
+
+    headers = {
+        "Authorization": f"Bearer {apiKey}",
+        "Content-Type": "application/json"
+    }
+
+    # 获取余额信息
+    try:
+        subscription_url = f"{apiUrl}/v1/dashboard/billing/subscription"
+        subscription_resp = requests.get(subscription_url, headers=headers)
+        subscription_data = subscription_resp.json()
+
+        total = subscription_data.get('hard_limit_usd', 0)
+
+        # 获取使用情况
+        start_date = datetime.now() - timedelta(days=99)
+        end_date = datetime.now()
+
+        usage_url = f"{apiUrl}/v1/dashboard/billing/usage?start_date={start_date.strftime('%Y-%m-%d')}&end_date={end_date.strftime('%Y-%m-%d')}"
+        usage_resp = requests.get(usage_url, headers=headers)
+        usage_data = usage_resp.json()
+
+        total_usage = usage_data.get('total_usage', 0) / 100
+
+        remaining = total - total_usage
+
+        return jsonify({
+            "total_balance": total,
+            "used_balance": total_usage,
+            "remaining_balance": remaining
+        })
+    except Exception as e:
+        return jsonify({"error": {"message": str(e), "type": "api_error", "code": ""}})
 
 
 @app.route("/chat", methods=["POST"])
