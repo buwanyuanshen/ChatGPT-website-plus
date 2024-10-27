@@ -56,19 +56,21 @@
 
 ![image](https://github.com/buwanyuanshen/ChatGPT-website-plus/assets/144007759/eef83fed-dacb-4de1-896f-a5d8f5b92bec)
 
-# 截止2024.10.08最新ChatGPT免费使用网址，还在更新中！：
-1. ChatGPT FREE:[ChatGPT FREE](https://gpt5.sbs) 
-2. Paint-Web:[Paint-Web](https://paint.gpt5.sbs) 
-3. ChatGPT-NextWeb:[ChatGPT-NextWeb](https://chatpro.icu)
-4. ChatGPT-Lobe:[ChatGPT-Lobe](https://lobe.chatpro.icu)
-5. Chat-MJ:[Chat-MJ](https://mj.chatpro.icu)
-6. Chat-OpenWebUI:[Chat-MJ](https://open.chatpro.icu) 
-7. Chat-Plus-Free:[Chat-Plus-Free](https://free.chatpro.icu)
-8. Chat-Plus-New-Charge:[Chat-Plus-New-Charge](https://gpt.chatpro.icu)
-9. Chat-Plus-Old-Charge:[Chat-Plus-Old-Charge](https://gpts.chatpro.icu)
-10. CF API:[CF API](https://api.gpt5.sbs)
-11. CF SHOP:[CF API](https://shop.chatpro.icu)
-12. 可以加入[q群226848325](https://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=1OOigjF5hxHUSQ5GE5U2UOIwswuckYOe&authKey=2pdTkM0NqehD2OuMojvBMnsmCAUcD6oO3ttDzS5CNle8tnre1a9Jp30aJZVUnC2c&noverify=0&group_code=226848325)学习交流！
+# 截止2024.10.27最新ChatGPT免费使用网址，还在更新中！：
+1. Free Chat（后端）:[Free Chat（后端）](https://gpt5.sbs)
+2. Free Chat（前端）:[Free Chat（前端）](https://f1.gpt5.sbs) 
+3. Paint-Web:[Paint-Web](https://paint.gpt5.sbs) 
+4. ChatGPT-NextWeb:[ChatGPT-NextWeb](https://chatpro.icu)
+5. ChatGPT-Lobe:[ChatGPT-Lobe](https://lobe.chatpro.icu)
+6. Chat-MJ:[Chat-MJ](https://mj.chatpro.icu)
+7. Chat-OpenWebUI:[Chat-OpenWebUI](https://open.chatpro.icu) 
+8. ChatGPT:[ChatGPT](https://free.chatpro.icu)
+9. ChatGPT-Plus:[ChatGPT-Plus](https://gpt.chatpro.icu)
+11. CF API:[CF API](https://api.gpt5.sbs)
+12. CF SHOP:[CF SHOP](https://shop.chatpro.icu)
+13. CF 机场:[CF 机场](https://v2.gpt5.sbs)
+14. CF 支付:[CF 支付](https://pay.chatpro.icu)
+15. 可以加入[q群226848325](https://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=1OOigjF5hxHUSQ5GE5U2UOIwswuckYOe&authKey=2pdTkM0NqehD2OuMojvBMnsmCAUcD6oO3ttDzS5CNle8tnre1a9Jp30aJZVUnC2c&noverify=0&group_code=226848325)学习交流！
 ## 其余项目网址
 [ChatGPT-website-forward-vercel(前端)](https://github.com/buwanyuanshen/ChatGPT-website-forward-vercel),一键部署有流式。
 
