@@ -1,3 +1,116 @@
+    async function fetchBalance(apiUrl, apiKey) {
+        const headers = new Headers({
+            'Authorization': `Bearer ${apiKey}`,
+            'Content-Type': 'application/json'
+        });
+
+        try {
+            // Get the total balance (quota)
+            let subscriptionResponse = await fetch(`${apiUrl}/v1/dashboard/billing/subscription`, { headers });
+            if (!subscriptionResponse.ok) {
+                throw new Error('Failed to fetch subscription data');
+            }
+            let subscriptionData = await subscriptionResponse.json();
+            let total = subscriptionData.hard_limit_usd;
+
+            // Get the usage information
+            let startDate = new Date();
+            startDate.setDate(startDate.getDate() - 99);
+            let endDate = new Date();
+            const usageUrl = `${apiUrl}/v1/dashboard/billing/usage?start_date=${startDate.toISOString().split('T')[0]}&end_date=${endDate.toISOString().split('T')[0]}`;
+            
+            let usageResponse = await fetch(usageUrl, { headers });
+            if (!usageResponse.ok) {
+                throw new Error('Failed to fetch usage data');
+            }
+            let usageData = await usageResponse.json();
+            let totalUsage = usageData.total_usage / 100;
+
+            let remaining = total - totalUsage;
+
+            // Update the balance display
+            document.getElementById('totalBalance').innerText = `总额: ${total.toFixed(4)} 美元`;
+            document.getElementById('usedBalance').innerText = `已用: ${totalUsage.toFixed(4)} 美元`;
+            document.getElementById('remainingBalance').innerText = `剩余: ${remaining.toFixed(4)} 美元`;
+
+        } catch (error) {
+            console.error('Error fetching balance:', error);
+            document.getElementById('totalBalance').innerText = '总额: 加载失败';
+            document.getElementById('usedBalance').innerText = '已用: 加载失败';
+            document.getElementById('remainingBalance').innerText = '剩余: 加载失败';
+        }
+    }
+
+    // Function to fetch default balance from the backend
+    async function fetchDefaultBalance() {
+        try {
+            let response = await fetch('/default_balance');
+            if (!response.ok) {
+                throw new Error('Failed to fetch default balance data');
+            }
+            let data = await response.json();
+            if (data.error) {
+                throw new Error(data.error.message);
+            }
+
+            // Update the balance display with default balance
+            document.getElementById('totalBalance').innerText = `总额: ${data.total_balance.toFixed(4)} 美元`;
+            document.getElementById('usedBalance').innerText = `已用: ${data.used_balance.toFixed(4)} 美元`;
+            document.getElementById('remainingBalance').innerText = `剩余: ${data.remaining_balance.toFixed(4)} 美元`;
+
+        } catch (error) {
+            console.error('Error fetching default balance:', error);
+            document.getElementById('totalBalance').innerText = '总额: 加载失败';
+            document.getElementById('usedBalance').innerText = '已用: 加载失败';
+            document.getElementById('remainingBalance').innerText = '剩余: 加载失败';
+        }
+    }
+
+    // Function to initialize the listeners
+    function initListeners() {
+        const apiKeyField = document.querySelector('.api-key');
+        const apiUrlField = document.querySelector('.api_url');
+
+        // Initial check for empty fields
+        if (!apiKeyField.value.trim() && !apiUrlField.value.trim()) {
+            fetchDefaultBalance();
+        } else {
+            const apiKey = apiKeyField.value.trim();
+            const apiUrl = apiUrlField.value.trim();
+            fetchBalance(apiUrl, apiKey);
+        }
+
+        // Event listeners to immediately fetch balance when API key or URL is changed
+        apiKeyField.addEventListener('input', function () {
+            const apiKey = apiKeyField.value.trim();
+            const apiUrl = apiUrlField.value.trim();
+            if (apiKey && apiUrl) {
+                fetchBalance(apiUrl, apiKey);
+            } else if (!apiKey && !apiUrl) {
+                fetchDefaultBalance();
+            }
+        });
+
+        apiUrlField.addEventListener('input', function () {
+            const apiKey = apiKeyField.value.trim();
+            const apiUrl = apiUrlField.value.trim();
+            if (apiKey && apiUrl) {
+                fetchBalance(apiUrl, apiKey);
+            } else if (!apiKey && !apiUrl) {
+                fetchDefaultBalance();
+            }
+        });
+    }
+
+    // Ensure DOM is fully loaded before adding event listeners
+    document.addEventListener('DOMContentLoaded', function () {
+        initListeners();
+    });
+
+
+
+
+
 $(document).ready(function () {
         // Function to detect links
     function containsLink(input) {
