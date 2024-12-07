@@ -29,9 +29,9 @@
             let remaining = total - totalUsage;
 
             // Update the balance display
-            document.getElementById('totalBalance').innerText = `总额: ${total.toFixed(4)} 美元`;
-            document.getElementById('usedBalance').innerText = `已用: ${totalUsage.toFixed(4)} 美元`;
-            document.getElementById('remainingBalance').innerText = `剩余: ${remaining.toFixed(4)} 美元`;
+            document.getElementById('totalBalance').innerText = `总额: ${total.toFixed(4)} $`;
+            document.getElementById('usedBalance').innerText = `已用: ${totalUsage.toFixed(4)} $`;
+            document.getElementById('remainingBalance').innerText = `剩余: ${remaining.toFixed(4)} $`;
 
         } catch (error) {
             console.error('Error fetching balance:', error);
@@ -54,9 +54,9 @@
             }
 
             // Update the balance display with default balance
-            document.getElementById('totalBalance').innerText = `总额: ${data.total_balance.toFixed(4)} 美元`;
-            document.getElementById('usedBalance').innerText = `已用: ${data.used_balance.toFixed(4)} 美元`;
-            document.getElementById('remainingBalance').innerText = `剩余: ${data.remaining_balance.toFixed(4)} 美元`;
+            document.getElementById('totalBalance').innerText = `总额: ${data.total_balance.toFixed(4)} $`;
+            document.getElementById('usedBalance').innerText = `已用: ${data.used_balance.toFixed(4)} $`;
+            document.getElementById('remainingBalance').innerText = `剩余: ${data.remaining_balance.toFixed(4)} $`;
 
         } catch (error) {
             console.error('Error fetching default balance:', error);
