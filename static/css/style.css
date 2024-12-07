@@ -1,21 +1,21 @@
     .balance-total {
         color: #007bff;
         font-weight: bold;
-        font-size: 13px;
+        font-size: 12.5px;
         margin-bottom: 5px;
     }
 
     .balance-used {
         color: #dc3545;
         font-weight: bold;
-        font-size: 13px;
+        font-size: 12.5px;
         margin-bottom: 5px;
     }
 
     .balance-remaining {
         color: #28a745;
         font-weight: bold;
-        font-size: 13px;
+        font-size: 12.5px;
     }
 :root[bg-theme='light'] {
   --bg-color: white;
