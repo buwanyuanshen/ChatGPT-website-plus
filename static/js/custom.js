@@ -1,4 +1,139 @@
-    async function fetchBalance(apiUrl, apiKey) {
+// Helper functions to set and get cookies
+function setCookie(name, value, days) {
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+}
+
+function getCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // 余额显示/隐藏功能
+    var toggleBalance = document.getElementById('toggleBalance');
+    var balanceInfo = document.getElementById('balanceInfo');
+
+    // 读取Cookie并设置初始状态
+    var balanceVisibility = getCookie('balanceVisibility');
+    if (balanceVisibility === 'hidden') {
+        toggleBalance.checked = false;
+        balanceInfo.style.display = 'none';
+    } else {
+        toggleBalance.checked = true;
+        balanceInfo.style.display = 'block';
+    }
+
+    // 监听开关变化
+    toggleBalance.addEventListener('change', function() {
+        if (this.checked) {
+            balanceInfo.style.display = 'block';
+            setCookie('balanceVisibility', 'visible', 30); // 保存30天
+        } else {
+            balanceInfo.style.display = 'none';
+            setCookie('balanceVisibility', 'hidden', 30); // 保存30天
+        }
+    });
+
+    // Select2 初始化
+    var modelSelect = $('#modelSelect');
+
+    // 获取默认模型
+    var defaultModels = [
+        { id: 'gpt-4o-mini', text: 'gpt-4o-mini（OpenAI，128k，识图使用图片链接+中/英文逗号+问题）' }
+        // 在此处添加更多默认模型对象，如：
+        // { id: 'model-id', text: 'Model Name (Description)' }
+    ];
+
+    // 获取存储的自定义模型
+    var customModels = JSON.parse(localStorage.getItem('customModels')) || [];
+
+    // 合并默认模型和自定义模型
+    var allModels = defaultModels.concat(customModels);
+
+    // 初始化 Select2
+    modelSelect.select2({
+        data: allModels,
+        tags: true, // 允许用户添加新标签
+        placeholder: "选择或输入模型名称",
+        allowClear: true,
+        width: '100%'
+    });
+
+    // 监听 Select2 的选择事件，以保存自定义模型
+    modelSelect.on('select2:select', function(e) {
+        var selected = e.params.data;
+        // 检查是否为自定义模型
+        if (!defaultModels.some(model => model.id === selected.id)) {
+            // 如果自定义模型尚未存在于 customModels 中，添加它
+            if (!customModels.some(model => model.id === selected.id)) {
+                customModels.push(selected);
+                localStorage.setItem('customModels', JSON.stringify(customModels));
+            }
+        }
+    });
+
+    // 处理添加自定义模型
+    var addCustomModelBtn = document.querySelector('.add-custom-model');
+    var deleteCustomModelBtn = document.querySelector('.delete-custom-model');
+    var customModelInput = document.getElementById('customModelInput');
+
+    addCustomModelBtn.addEventListener('click', function() {
+        var newModelName = customModelInput.value.trim();
+        if (newModelName) {
+            // 检查模型是否已存在
+            var exists = allModels.some(model => model.text === newModelName);
+            if (!exists) {
+                var newModel = { id: newModelName, text: newModelName };
+                customModels.push(newModel);
+                localStorage.setItem('customModels', JSON.stringify(customModels));
+                // 添加新模型到 Select2
+                var newOption = new Option(newModel.text, newModel.id, false, false);
+                modelSelect.append(newOption).trigger('change');
+                customModelInput.value = '';
+                alert('自定义模型已添加。');
+            } else {
+                alert('该模型已存在。');
+            }
+        } else {
+            alert('请输入模型名称。');
+        }
+    });
+
+    // 处理删除自定义模型
+    deleteCustomModelBtn.addEventListener('click', function() {
+        var modelToDelete = customModelInput.value.trim();
+        if (modelToDelete) {
+            var index = customModels.findIndex(model => model.text === modelToDelete);
+            if (index !== -1) {
+                customModels.splice(index, 1);
+                localStorage.setItem('customModels', JSON.stringify(customModels));
+                // 从 Select2 中移除模型
+                modelSelect.find('option[value="' + modelToDelete + '"]').remove().trigger('change');
+                customModelInput.value = '';
+                alert('自定义模型已删除。');
+            } else {
+                alert('未找到该模型或该模型为默认模型。');
+            }
+        } else {
+            alert('请输入要删除的模型名称。');
+        }
+    });
+});
+
+
+async function fetchBalance(apiUrl, apiKey) {
         const headers = new Headers({
             'Authorization': `Bearer ${apiKey}`,
             'Content-Type': 'application/json'
