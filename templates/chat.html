@@ -78,8 +78,8 @@
                                     
                                     <div class="settings-common">
                                         <span><i class="fa fa-brain fa-lg" aria-hidden="true"></i>&nbsp; OpenAI Models</span>
-                                        <select class="form-control ipt-common model">
-                                             <option value="gpt-4o-mini">gpt-4o-mini（OpenAI，128k，识图使用图片链接+中/英文逗号+问题）</option>
+					<select class="form-control ipt-common model-select" id="modelSelect">   
+					    <option value="gpt-4o-mini">gpt-4o-mini（OpenAI，128k，识图使用图片链接+中/英文逗号+问题）</option>
                                             <option value="gpt-4o-mini-2024-07-18">gpt-4o-mini-2024-07-18（OpenAI，128k，识图使用图片链接+中/英文逗号+问题）</option>
                                             <option value="gpt-4o">gpt-4o（OpenAI，128k，识图使用图片链接+中/英文逗号+问题）</option>
                                             <option value="gpt-4o-2024-05-13">gpt-4o-2024-05-13（OpenAI，128k，识图使用图片链接+中/英文逗号+问题）</option>
@@ -347,6 +347,15 @@
                                             </label>
                                         </div>
                                     </div>
+					<div class="settings-common">
+    <span><i class="fa fa-eye fa-lg" aria-hidden="true"></i>&nbsp; 显示余额信息</span>
+    <div class="chck-btn">
+        <input id="toggleBalance" type="checkbox" checked>
+        <label for="toggleBalance" class="check-trail">
+            <div class="check-handler"></div>
+        </label>
+    </div>
+</div>
                                 </div>
                             </div>
                         </div>
