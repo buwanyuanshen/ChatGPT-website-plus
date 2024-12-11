@@ -17,6 +17,22 @@ app.config.from_pyfile('settings.py')
 @app.route("/", methods=["GET"])
 def index():
     return render_template("chat.html")
+
+@app.route("/upload_image", methods=["POST"])
+def upload_image():
+    """Handle image upload and return Base64-encoded string."""
+    image = request.files.get("image")
+    if not image:
+        return jsonify({"error": "No image uploaded."})
+
+    try:
+        # Encode the image to Base64
+        image_data = image.read()
+        base64_image = base64.b64encode(image_data).decode('utf-8')
+        return jsonify({"base64_image": base64_image})
+    except Exception as e:
+        return jsonify({"error": str(e)})
+
 @app.route("/default_balance", methods=["GET"])
 def get_default_balance():
     # 从配置文件中获取默认的 API_KEY 和 API_URL
@@ -72,6 +88,7 @@ def chat():
     max_tokens = request.form.get("max_tokens", 4000)
     password = request.form.get("password", None)
     api_url = request.form.get("api_url", None)
+    image_base64 = request.form.get("image_base64", None)
     # 获取当前日期和时间
     current_time = datetime.now().strftime("%Y年%m月%d日%H:%M:%S")
 
@@ -112,7 +129,7 @@ def chat():
                                           "type": "empty_password_error", "code": ""}})
     if apiKey is None:
         if "gpt-4" in model or "dall" in model or "claude" in model or "SparkDesk" in model or "gemini" in model or "o1" in model or "chatgpt" in model or "embedding" in model or "moderation" in model or "glm" in model or "yi" in model or "commmand" in model or "stable" in model or "deep" in model or "midjourney" in model or "douubao" in model or "qwen" in model or "co" in model or "suno" in model or "abab" in model or "chat" in model:
-            if password not in ["密码1", "密码2", "密码3", "密码4", "密码5","密码6"]:
+            if password not in ["freegpt", "D2f9A7c5", "3E6bR8s1", "H4j7N9q2", "5T6gY1h9","L8m3W7e2"]:
                 return jsonify({
                     "error": {
                         "message": "请检查并输入正确的授权码或者输入自己的apikey！！！",
@@ -123,33 +140,33 @@ def chat():
 
     if apiKey is None:
         if "gpt-4" in model or "dall" in model or "claude" in model or "SparkDesk" in model or "gemini" in model or "o1" in model or "chatgpt" in model or "embedding" in model or "moderation" in model or "glm" in model or "yi" in model or "commmand" in model or "stable" in model or "deep" in model or "midjourney" in model or "douubao" in model or "qwen" in model or "co" in model or "suno" in model or "abab" in model or "chat" in model:
-            if password == "密码1":
+            if password == "freegpt":
                 api_keys = app.config.get("API_KEYS1", [])
                 apiKey = os.environ.get('OPENAI_API_KEY', random.choice(api_keys))
                 api_url = app.config.get("API_URL1", None)
             else:
-                if password == "密码2":
+                if password == "D2f9A7c5":
                     api_keys = app.config.get("API_KEYS2", [])
                     apiKey = os.environ.get('OPENAI_API_KEY', random.choice(api_keys))
                     api_url = app.config.get("API_URL2", None)
-                elif password == "密码3":
+                elif password == "3E6bR8s1":
                     api_keys = app.config.get("API_KEYS3", [])
                     apiKey = os.environ.get('OPENAI_API_KEY', random.choice(api_keys))
                     api_url = app.config.get("API_URL3", None)
-                elif password == "密码4":
+                elif password == "H4j7N9q2":
                     api_keys = app.config.get("API_KEYS4", [])
                     apiKey = os.environ.get('OPENAI_API_KEY', random.choice(api_keys))
                     api_url = app.config.get("API_URL4", None)
-                elif password == "密码5":
+                elif password == "5T6gY1h9":
                     api_keys = app.config.get("API_KEYS5", [])
                     apiKey = os.environ.get('OPENAI_API_KEY', random.choice(api_keys))
                     api_url = app.config.get("API_URL5", None)
-                elif password == "密码6":
+                elif password == "L8m3W7e2":
                     api_keys = app.config.get("API_KEYS6", [])
                     apiKey = os.environ.get('OPENAI_API_KEY', random.choice(api_keys))
                     api_url = app.config.get("API_URL6", None)
     if apiKey is None:
-        if password not in ["密码1", "密码2", "密码3", "密码4", "密码5","密码6"]:
+        if password not in ["freegpt", "D2f9A7c5", "3E6bR8s1", "H4j7N9q2", "5T6gY1h9","L8m3W7e2"]:
             if "gizmo" in model:
                 api_keys = app.config.get("API_KEYS7", [])
                 apiKey = os.environ.get('OPENAI_API_KEY', random.choice(api_keys))
@@ -345,8 +362,29 @@ def chat():
             "stream": True,
         }
 
-    elif model == "gpt-4o" or "vision" in model or "glm-4v" in model or "glm-4v-plus" in model or model == "gpt-4o-2024-05-13" or model == "gpt-4o-2024-08-06" or model == "gpt-4o-2024-11-20" or model == "chatgpt-4o-latest" or "claude-3" in model or model == "gpt-4o-mini" or model == "gpt-4o-mini-2024-07-18" or "gemini-1.5" in model or "gemini-exp" in model or "learnlm-1.5-pro-experimental" in model: 
-        if ',' not in messages and '，' not in messages:
+    elif  "gpt-4" in model or "vision" in model or "glm-4v" in model or "glm-4v-plus" in model or "claude-3" in model or "gemini-1.5" in model or "gemini-exp" in model or "learnlm-1.5-pro-experimental" in model or "o1" in model:
+        if image_base64:
+                api_url += "/v1/chat/completions"
+                data = {
+                    "messages": [
+                        {
+                            "role": "user",
+                            "content": [
+                                {"type": "text", "text": messages},
+                                {
+                                    "type": "image_url",
+                                    "image_url": {"url": f"data:image/jpeg;base64,{image_base64}"},
+                                },
+                            ],
+                        }
+                    ],
+                    "model": model,
+                    "max_tokens": int(max_tokens),
+                    "stream": True,
+                }
+
+        else:
+            # 对于其他模型，使用原有 api_url
             api_url += "/v1/chat/completions"
             data = {
                 "messages": json.loads(messages),
@@ -357,65 +395,6 @@ def chat():
                 "n": 1,
                 "stream": True,
             }
-        else:
-            # 尝试从消息中提取链接和用户文本
-            image_url_match = re.search(r'https://\S+[,，]', messages)
-            image_url = image_url_match.group().strip(",，") if image_url_match else None
-            
-            try:
-                messages_list = json.loads(messages)
-            except json.JSONDecodeError as e:
-                print(f"Error decoding JSON: {e}")
-                messages_list = []
-    
-            user_text = ""
-            for message in messages_list:
-                content = message.get("content", "") if isinstance(message, dict) else ""
-                if not content and isinstance(message, str):
-                    try:
-                        message_dict = json.loads(message)
-                        content = message_dict.get("content", "")
-                    except json.JSONDecodeError as e:
-                        print(f"Error decoding JSON in message: {e}")
-                
-                # 提取用户文本，忽略链接前是否有逗号
-                if content:
-                    match = re.search(r"(https://\S+)?[,，](.+)", content)
-                    if match:
-                        user_text = match.group(2)
-                    else:
-                        user_text = content
-    
-            if image_url:
-                api_url += "/v1/chat/completions"
-                data = {
-                    "messages": [
-                        {
-                            "role": "user",
-                            "content": [
-                                {"type": "text", "text": user_text},
-                                {
-                                    "type": "image_url",
-                                    "image_url": {"url": image_url},
-                                },
-                            ],
-                        }
-                    ],
-                    "model": model,
-                    "max_tokens": int(max_tokens),
-                    "stream": True,
-                }
-            else:
-                api_url += "/v1/chat/completions"
-                data = {
-                    "messages": json.loads(messages),
-                    "model": model,
-                    "max_tokens": int(max_tokens),
-                    "temperature": float(temperature),
-                    "top_p": 1,
-                    "n": 1,
-                    "stream": True,
-                }
     elif "o1" in model and "all" not in model:
         api_url += "/v1/chat/completions"
         data = {
@@ -424,9 +403,10 @@ def chat():
                     "max_tokens": int(max_tokens),
                     "temperature": 1,
                     "top_p": 1,
-                    "n": 1,                    
+                    "n": 1,
                     "stream": True,
-        }
+
+            }
                    
     else:
             # 对于其他模型，使用原有 api_url
@@ -450,6 +430,7 @@ def chat():
         "Content-Type": "application/json",
         "Authorization": f"Bearer {apiKey}",
     }
+
     try:
         resp = requests.post(
             url=api_url,
@@ -568,7 +549,7 @@ def chat():
         # 解析响应的音频数据并进行base64编码
         audio_data = base64.b64encode(resp.content).decode('utf-8')
         return jsonify(audio_data)
-
+        
     # gpt模型回复接收
     def generate():
         errorStr = ""
@@ -578,9 +559,7 @@ def chat():
                 streamStr = chunk.decode("utf-8").replace("data: ", "")
                 try:
                     streamStr = streamStr.strip("[DONE]")
-                    print(streamStr)
                     streamDict = json.loads(streamStr)
-                    print(streamDict)
                 except json.JSONDecodeError:
                     errorStr += streamStr.strip()
                     continue
@@ -588,7 +567,6 @@ def chat():
                 if "choices" in streamDict:
                     if streamDict["choices"]:
                         delData = streamDict["choices"][0]
-                        print(delData)
                         if streamDict.get("model") is None:
                             break
                         else:
