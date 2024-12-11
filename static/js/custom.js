@@ -1,23 +1,95 @@
+function resetImageUpload() {
+    imageUpload.value = '';
+    base64Image = '';
+    imagePreviewContainer.style.display = 'none';
+    imagePreview.src = '';
+    // 可选：触发 change 事件以更新状态
+    var event = new Event('change', { bubbles: true });
+    imageUpload.dispatchEvent(event);
+}
+
+    var base64Image = "";
+    var imageUpload = document.getElementById('imageUpload');
+    var imagePreviewContainer = document.getElementById('imagePreviewContainer');
+    var closeButton = document.getElementById('closeButton');
+
+    imageUpload.addEventListener('change', function(event) {
+        var file = event.target.files[0];
+        if (file) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                base64Image = e.target.result.split(',')[1];
+                imagePreviewContainer.style.display = 'block';
+                document.getElementById('imagePreview').src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        } else {
+            base64Image = '';
+            imagePreviewContainer.style.display = 'none';
+            document.getElementById('imagePreview').src = '';
+        }
+    });
+
+    closeButton.addEventListener('click', function() {
+        imageUpload.value = '';
+        base64Image = '';
+        imagePreviewContainer.style.display = 'none';
+        document.getElementById('imagePreview').src = '';
+
+        var event = new Event('change', { bubbles: true });
+        imageUpload.dispatchEvent(event);
+    });
+function checkModelAndShowUpload() {
+    var modelSelect = document.querySelector('.model');
+    var selectedModel = modelSelect.value.toLowerCase();
+    var uploadArea = document.getElementById('uploadArea');
+
+    if (
+        selectedModel.includes("gpt-4") ||
+        selectedModel.includes("glm-4v") ||
+        selectedModel.includes("claude-3") ||
+        selectedModel.includes("gemini-1.5") ||
+        selectedModel.includes("gemini-exp") ||
+        selectedModel.includes("learnlm-1.5-pro-experimental") ||
+        selectedModel.includes("vision") ||
+        selectedModel.includes("o1")
+
+    ) {
+        uploadArea.style.display = 'block';
+    } else {
+        uploadArea.style.display = 'none';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    var modelSelect = document.querySelector('.model');
+    modelSelect.addEventListener('change', checkModelAndShowUpload);
+
+    // 初始化时检查一次
+    checkModelAndShowUpload();
+});
+
 // Helper functions to set and get cookies
 function setCookie(name, value, days) {
     var expires = "";
     if (days) {
         var date = new Date();
-        date.setTime(date.getTime() + (days*24*60*60*1000));
-        expires = "; expires=" + date.toUTCString();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));  // Calculate expiration time
+        expires = "; expires=" + date.toUTCString();  // Convert to UTC string
     }
-    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+    document.cookie = name + "=" + (value || "") + expires + "; path=/";  // Set cookie
 }
 
 function getCookie(name) {
     var nameEQ = name + "=";
     var ca = document.cookie.split(';');
-    for(var i=0;i < ca.length;i++) {
-        var c = ca[i];
-        while (c.charAt(0)==' ') c = c.substring(1,c.length);
-        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i].trim();  // Use trim() to clean up any extra spaces
+        if (c.indexOf(nameEQ) === 0) {
+            return c.substring(nameEQ.length, c.length);  // Return the cookie value
+        }
     }
-    return null;
+    return null;  // If cookie is not found, return null
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -45,9 +117,11 @@ document.addEventListener('DOMContentLoaded', function() {
             setCookie('balanceVisibility', 'hidden', 30); // 保存30天
         }
     });
+});
 
 
-async function fetchBalance(apiUrl, apiKey) {
+
+    async function fetchBalance(apiUrl, apiKey) {
         const headers = new Headers({
             'Authorization': `Bearer ${apiKey}`,
             'Content-Type': 'application/json'
@@ -708,9 +782,11 @@ chatBtn.click(function() {
 
     // 获取随机的 API key
     const apiKey = getRandomApiKey();
-
     // ajax上传数据
     let data = {};
+console.log(base64Image);
+let imageSrc = document.getElementById('imagePreview').src;
+    data.image_base64 = imageSrc.split(',')[1];
     data.password = $(".settings-common .password").val();
     data.model = $(".settings-common .model").val();
     data.temperature = parseFloat($(".settings-common .temperature").val());
@@ -817,6 +893,7 @@ chatBtn.click(function() {
             $(".answer .others .center").css("display", "none");
             // 添加复制
             copy();
+            resetImageUpload();
         }
     });
 });
