@@ -1,3 +1,43 @@
+.left {
+    display: flex;
+    align-items: center;
+}
+#uploadButton {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    /* 其他样式 */
+}
+
+#uploadArea {
+position: relative;
+margin-left: -15px;
+    margin-top: 20px;
+    margin-right: 5px;
+    width:40px;
+    background-color: #f9f9f9;
+}
+
+#uploadArea input[type="file"] {
+    display: none;
+}
+
+.custom-upload-button {
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#imagePreviewContainer {
+    display: inline-block;
+    margin-top: 5px;
+}
     .balance-total {
         color: #007bff;
         font-weight: bold;
@@ -17,6 +57,7 @@
         font-weight: bold;
         font-size: 12.5px;
     }
+
 :root[bg-theme='light'] {
   --bg-color: white;
 }
@@ -560,6 +601,7 @@ input[type="checkbox"]:checked + .check-trail .check-handler::before {
   overflow-y: auto;
   border: none;
   box-shadow:none;
+  margin-left: 10px;
 }
 .answer .ipt textarea:focus{
   border: none !important;
