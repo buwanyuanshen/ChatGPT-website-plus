@@ -49,6 +49,7 @@ function checkModelAndShowUpload() {
         selectedModel.includes("glm-4v") ||
         selectedModel.includes("claude-3") ||
         selectedModel.includes("gemini-1.5") ||
+        selectedModel.includes("gemini-2.0") ||
         selectedModel.includes("gemini-exp") ||
         selectedModel.includes("learnlm-1.5-pro-experimental") ||
         selectedModel.includes("vision") ||
