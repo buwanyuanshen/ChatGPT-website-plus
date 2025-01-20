@@ -567,11 +567,17 @@ def chat():
                             if "text" in delData:
                                 respStr = delData["text"]
                                 yield respStr
-                            elif "delta" in delData and "content" in delData["delta"]:
+                            elif "delta" in delData and "content" in delData["delta"] and "reasoning_content" not in delData["delta"]:
                                 respStr = delData["delta"]["content"]
                                 yield respStr
-                            elif "message" in delData and "content" in delData["message"]:
+                            elif "delta" in delData and "content" in delData["delta"] and "reasoning_content" in delData["delta"]:
+                                respStr = delData["delta"]["reasoning_content"] + delData["delta"]["content"]
+                                yield respStr
+                            elif "message" in delData and "content" in delData["message"] and "reasoning_content" not in delData["message"]:
                                 respStr = delData["message"]["content"]
+                                yield respStr
+                            elif "message" in delData and "content" in delData["message"] and "reasoning_content" in delData["message"]:
+                                respStr = delData["message"]["reasoning_content"] + delData["message"]["content"]
                                 yield respStr
                     else:
                         errorStr += f"Empty choices in data: {streamDict}\n"
