@@ -392,7 +392,7 @@ def chat():
 
             }
 
-    elif "deepseek-reasoner" in model:
+    elif "deepseek-r" in model:
         api_url += "/v1/chat/completions"
         data = {
                     "messages": json.loads(messages),
