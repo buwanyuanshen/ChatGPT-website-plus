@@ -346,7 +346,7 @@ def chat():
             "stream": True,
         }
 
-    elif  "gpt-4" in model or "vision" in model or "glm-4v" in model or "glm-4v-plus" in model or "claude-3" in model or "gemini-1.5" in model or "gemini-exp" in model or "learnlm-1.5-pro-experimental" in model or "o1" in model or "gemini-2.0" in model:
+    elif  "gpt-4" in model or "vision" in model or "glm-4v" in model or "glm-4v-plus" in model or "claude-3" in model or "gemini-1.5" in model or "gemini-exp" in model or "learnlm-1.5-pro-experimental" in model or "o1" in model or "o3" in model or "gemini-2.0" in model:
         if image_base64:
                 api_url += "/v1/chat/completions"
                 data = {
@@ -366,7 +366,7 @@ def chat():
                     "max_tokens": int(max_tokens),
                     "stream": True,
                 }
-        elif "claude-3-7-sonnet-20250219-thinking" in model:
+        elif "claude-3-7-sonnet-20250219-thinking" in model or "claude-3-7-sonnet-thinking" in model or "claude-3-7-sonnet-thinking-20250219" in model:
             api_url += "/v1/chat/completions"
             data = {
                     "messages": json.loads(messages),
@@ -384,7 +384,19 @@ def chat():
                     "temperature": 1,
                     "top_p": 1,
                     "n": 1,
-                    "stream": True,
+                    "stream": False,
+
+            }
+          elif "o3" in model and "all" not in model:
+            api_url += "/v1/chat/completions"
+            data = {
+                    "messages": json.loads(messages),
+                    "model": model,
+                    "max_tokens": int(max_tokens),
+                    "temperature": 1,
+                    "top_p": 1,
+                    "n": 1,
+                    "stream": False,
 
             }
         else:
