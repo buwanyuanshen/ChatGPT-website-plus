@@ -1033,19 +1033,25 @@ function checkAndSetContinuousDialogue(modelName) {
     const hasTextem = modelName.toLowerCase().includes("embedding");
     const hasTextmo = modelName.toLowerCase().includes("moderation");
     const hasDALL = modelName.toLowerCase().includes("dall");
-    const hasVs = modelName.toLowerCase().includes("v");
+    const hasVs = modelName.toLowerCase().includes("glm-4v");
+    const hasVi = modelName.toLowerCase().includes("vision");
     const hasMj = modelName.toLowerCase().includes("midjourney");
     const hasSD = modelName.toLowerCase().includes("stable");
     const hasFlux = modelName.toLowerCase().includes("flux");
     const hasVd = modelName.toLowerCase().includes("video");
-    const isContinuousDialogueEnabled = !(hasTTS || hasDALL || hasCompletion1 || hasCompletion2 || hasCompletion3 || hasTextem || hasTextmo || hasVs || hasMj || hasSD || hasFlux || hasVd);
+    const hasSora = modelName.toLowerCase().includes("sora");
+    const hasSuno = modelName.toLowerCase().includes("suno");
+    const hasCog = modelName.toLowerCase().includes("cogview");
+    const hasKo = modelName.toLowerCase().includes("kolors");
+    const hasKl = modelName.toLowerCase().includes("kling");
+    const isContinuousDialogueEnabled = !(hasTTS || hasDALL || hasCompletion1 || hasCompletion2 || hasCompletion3 || hasTextem || hasTextmo || hasVs || hasVi || hasMj || hasSD || hasFlux || hasVd || hasSora || hasSuno || hasCog || hasKo || hasKl);
 
     // 设置连续对话状态
     $("#chck-2").prop("checked", isContinuousDialogueEnabled);
     localStorage.setItem('continuousDialogue', isContinuousDialogueEnabled);
 
     // 设置是否禁用checkbox
-    $("#chck-2").prop("disabled", hasTTS || hasCompletion1 || hasCompletion2 || hasCompletion3 || hasTextem || hasTextmo || hasVs || hasMj || hasSD || hasFlux || hasVd);
+    $("#chck-2").prop("disabled", hasTTS || hasCompletion1 || hasCompletion2 || hasCompletion3 || hasTextem || hasTextmo || hasVs || hasVi || hasMj || hasSD || hasFlux || hasVd || hasSora || hasSuno || hasCog || hasKo || hasKl);
 
     // 获取上一个模型名称
     const previousModel = localStorage.getItem('previousModel') || "";
@@ -1056,20 +1062,27 @@ function checkAndSetContinuousDialogue(modelName) {
     const hadCompletion3= previousModel.toLowerCase().includes("davinci-002");
     const hadTextem = previousModel.toLowerCase().includes("embedding");
     const hadTextmo = previousModel.toLowerCase().includes("moderation");
-    const hadVs = previousModel.toLowerCase().includes("v");
+    const hadVs = previousModel.toLowerCase().includes("glm-4v");
+    const hadVi = previousModel.toLowerCase().includes("vision");
     const hadMj = previousModel.toLowerCase().includes("midjourney");
     const hadSD = previousModel.toLowerCase().includes("stable");
     const hadFlux = previousModel.toLowerCase().includes("flux");
     const hadVd = previousModel.toLowerCase().includes("video");
+    const hadSora = previousModel.toLowerCase().includes("sora");
+    const hadSuno = previousModel.toLowerCase().includes("suno");
+    const hadCog = previousModel.toLowerCase().includes("cogview");
+    const hadKo = previousModel.toLowerCase().includes("kolors");
+    const hadKl = previousModel.toLowerCase().includes("kling");
 
     // 如果从包含tts或dall的模型切换到不包含这些的模型，清除对话
-    if ((hadTTS || hadDALL || hadCompletion1 || hadCompletion2 || hadCompletion3 || hadTextem || hadTextmo || hadVs || hadMj || hadSD || hadFlux || hadVd) && !(hasTTS || hasDALL || hasCompletion1 || hasCompletion2 || hasCompletion3 || hasTextem || hasTextmo|| hasVs || hasMj || hasSD || hasFlux || hasVd)) {
+    if ((hadTTS || hadDALL || hadCompletion1 || hadCompletion2 || hadCompletion3 || hadTextem || hadTextmo || hadVs || hadVi || hadMj || hadSD || hadFlux || hadVd || hadSora || hadSuno || hadCog || hadKo || hadKl ) && !(hasTTS || hasDALL || hasCompletion1 || hasCompletion2 || hasCompletion3 || hasTextem || hasTextmo|| hasVs || hasVi || hasMj || hasSD || hasFlux || hasVd || hasSora || hasSuno || hasCog || hasKo || hasKl)) {
         clearConversation();
     }
 
     // 更新上一个模型名称为当前模型
     localStorage.setItem('previousModel', modelName);
 }
+
 
 // 初始加载时检测selectedModel
 if (selectedModel) {
