@@ -279,7 +279,7 @@ $(document).ready(function () {
         }
     });
     
-    // 读取本地存储中的模型列表，并初始化模型选择下拉框
+ // 读取本地存储中的模型列表，并初始化模型选择下拉框
     var savedModels = localStorage.getItem('customModels');
     if (savedModels) {
         $(".model").html(savedModels);
@@ -294,14 +294,27 @@ $(document).ready(function () {
         if (customModelName !== "") {
             // 检查是否已存在相同模型
             if ($(".model option[value='" + customModelName + "']").length === 0) {
+                // 创建新的 option 元素
+                var newOption = $('<option>', {
+                    value: customModelName,
+                    text: customModelName, // 设置 textContent 为 value
+                    'data-description': customModelName //设置data-description为value
+                });
                 // 添加自定义模型到模型选择下拉框
-                $(".model").append('<option value="' + customModelName + '">' + customModelName + '</option>');
+                $(".model").prepend(newOption); // Prepend to add to the beginning
+
+                // 设置新添加的模型为选中项
+                $(".model").val(customModelName);
 
                 // 保存模型列表到本地存储
                 saveModelsToLocalStorage();
 
                 // 清空输入框
                 $(".custom-model").val("");
+
+                // 添加后立即更新标题
+                updateTitle(); // Call updateTitle here
+
             } else {
                 alert("该模型已存在！");
             }
@@ -340,6 +353,22 @@ $(document).ready(function () {
     function saveModelsToLocalStorage() {
         var modelsHtml = $(".model").html();
         localStorage.setItem('customModels', modelsHtml);
+    }
+
+    // 初始化 data-description 属性
+    function initializeDataDescription() {
+        $(".model option").each(function() {
+            if (!$(this).attr('data-description')) { // Only initialize if it doesn't exist
+                const originalText = $(this).text();
+                $(this).attr('data-description', originalText);
+                $(this).text($(this).val());
+            }
+
+        });
+    }
+
+    function updateTitle() {
+        $(".title h2").text($(".settings-common .model option:selected").data('description'));
     }
 });
 
