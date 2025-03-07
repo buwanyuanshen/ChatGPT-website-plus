@@ -1,3 +1,14 @@
+// 找到 select 元素
+const selectElement = document.querySelector('.form-control.ipt-common.model');
+
+if (selectElement) {
+    // 遍历 select 元素下的所有 option 元素
+    Array.from(selectElement.options).forEach(option => {
+        const originalText = option.textContent; // 保存原始文本
+        option.setAttribute('data-description', originalText); // 设置 data-description
+        option.textContent = option.value; // 设置 textContent 为 value
+    });
+}
 function resetImageUpload() {
     imageUpload.value = '';
     base64Image = '';
@@ -1084,22 +1095,22 @@ function checkAndSetContinuousDialogue(modelName) {
 }
 
 
-// 初始加载时检测selectedModel
-if (selectedModel) {
-    $(".settings-common .model").val(selectedModel);
-    checkAndSetContinuousDialogue(selectedModel);
-    // Update the title to use the selected option's text instead of its value
-    $(".title h2").text($(".settings-common .model option:selected").text());
-}
+        // 初始加载时检测selectedModel
+        if (selectedModel) {
+            $(".settings-common .model").val(selectedModel);
+            checkAndSetContinuousDialogue(selectedModel);
+            // Update the title to use the selected option's data-description
+            $(".title h2").text($(".settings-common .model option:selected").data('description'));
+        }
 
-// 监听model选择的变化
-$('.settings-common .model').change(function() {
-    const selectedModel = $(this).val();
-    localStorage.setItem('selectedModel', selectedModel);
-    checkAndSetContinuousDialogue(selectedModel);
-    // Update the title to use the selected option's text instead of its value
-    $(".title h2").text($(this).find("option:selected").text());
-});
+        // 监听model选择的变化
+        $('.settings-common .model').change(function() {
+            const selectedModel = $(this).val();
+            localStorage.setItem('selectedModel', selectedModel);
+            checkAndSetContinuousDialogue(selectedModel);
+            // Update the title to use the selected option's data-description
+            $(".title h2").text($(this).find("option:selected").data('description'));
+        });
 
 
 // 删除对话
