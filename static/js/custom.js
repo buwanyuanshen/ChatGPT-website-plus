@@ -678,7 +678,7 @@ function addResponseMessage(message) {
   // 处理流式消息中的代码块
   let codeMarkCount = 0;
   let index = message.indexOf('```');
-  
+
   while (index !== -1) {
     codeMarkCount++;
     index = message.indexOf('```', index + 3);
@@ -696,16 +696,32 @@ function addResponseMessage(message) {
     }
   }
 
-if (message.includes('Unexpected data format:')) {
-  // 从消息中提取 JSON 类似的字符串
-  const dataString = message.split('Unexpected data format: ')[1].trim();
+  if (message.includes('Unexpected data format:')) {
+    // 从消息中提取 JSON 类似的字符串
+    const dataString = message.split('Unexpected data format: ')[1].trim();
 
-  // 将单引号替换为双引号，形成有效的 JSON
-  const jsonString = dataString.replace(/'/g, '"');
+    // 将单引号替换为双引号，形成有效的 JSON
+    const jsonString = dataString.replace(/'/g, '"');
 
-  try {
-    const dataObject = JSON.parse(jsonString);
-    const urls = dataObject.data.map(item => item.url);
+    try {
+      const dataObject = JSON.parse(jsonString);
+      const urls = dataObject.data.map(item => item.url);
+
+      if (urls && urls.length > 0) {
+        let imagesHtml = '';
+        urls.forEach(url => {
+          imagesHtml += '<img src="' + url + '" style="max-width: 35%; max-height: 35%;" alt="messages"> ';
+        });
+        lastResponseElement.append('<div class="message-text">' + escapedMessage + imagesHtml + '</div>' + '<button class="view-button"><i class="fas fa-search"></i></button>' + '<button class="delete-message-btn"><i class="far fa-trash-alt"></i></button>');
+      }
+    } catch (error) {
+      console.error('JSON 解析错误:', error);
+      // 如果解析失败，回退到正则表达式方法
+    }
+  } else if (message.includes('https://')) {
+    // 使用改进的正则表达式方法作为回退
+    const urlRegex = /(https?:\/\/[^\s'"<>\]{}]+?\.(png|jpg|jpeg|gif)(?:\?[^\s]*)?)/gi;  // 修复：匹配更复杂的URL，允许query parameters
+    const urls = message.match(urlRegex);
 
     if (urls && urls.length > 0) {
       let imagesHtml = '';
@@ -714,35 +730,19 @@ if (message.includes('Unexpected data format:')) {
       });
       lastResponseElement.append('<div class="message-text">' + escapedMessage + imagesHtml + '</div>' + '<button class="view-button"><i class="fas fa-search"></i></button>' + '<button class="delete-message-btn"><i class="far fa-trash-alt"></i></button>');
     }
-  } catch (error) {
-    console.error('JSON 解析错误:', error);
-    // 如果解析失败，回退到正则表达式方法
+  } else if (message.startsWith('"//')) {
+    // 处理包含base64编码的音频
+    const base64Data = message.replace(/"/g, '');
+    lastResponseElement.append('<div class="message-text">' + '<audio controls=""><source src="data:audio/mpeg;base64,' + base64Data + '" type="audio/mpeg"></audio> ' + '</div>' + '<button class="delete-message-btn"><i class="far fa-trash-alt"></i></button>');
+  } else if (message.startsWith('//')) {
+    // 处理包含base64编码的音频
+    const base64Data = message;
+    lastResponseElement.append('<div class="message-text">' + '<audio controls=""><source src="data:audio/mpeg;base64,' + base64Data + '" type="audio/mpeg"></audio> ' + '</div>' + '<button class="delete-message-btn"><i class="far fa-trash-alt"></i></button>');
+  } else {
+    lastResponseElement.append('<div class="message-text">' + escapedMessage + '</div>' + '<button class="copy-button"><i class="far fa-copy"></i></button>' + '<button class="delete-message-btn"><i class="far fa-trash-alt"></i></button>');
   }
-} else if (message.includes('https://')) {
-  // 使用改进的正则表达式方法作为回退
-  const urlRegex = /(https?:\/\/[^\s'"<>\]\}]+?\.(png|jpg|jpeg|gif))/gi;
-  const urls = message.match(urlRegex);
 
-  if (urls && urls.length > 0) {
-    let imagesHtml = '';
-    urls.forEach(url => {
-      imagesHtml += '<img src="' + url + '" style="max-width: 35%; max-height: 35%;" alt="messages"> ';
-    });
-    lastResponseElement.append('<div class="message-text">' + escapedMessage + imagesHtml + '</div>' + '<button class="view-button"><i class="fas fa-search"></i></button>' + '<button class="delete-message-btn"><i class="far fa-trash-alt"></i></button>');
-  }
-} else if (message.startsWith('"//')) {
-  // 处理包含base64编码的音频
-  const base64Data = message.replace(/"/g, '');
-  lastResponseElement.append('<div class="message-text">' + '<audio controls=""><source src="data:audio/mpeg;base64,' + base64Data + '" type="audio/mpeg"></audio> ' + '</div>' + '<button class="delete-message-btn"><i class="far fa-trash-alt"></i></button>');
-} else if (message.startsWith('//')) {
-  // 处理包含base64编码的音频
-  const base64Data = message;
-  lastResponseElement.append('<div class="message-text">' + '<audio controls=""><source src="data:audio/mpeg;base64,' + base64Data + '" type="audio/mpeg"></audio> ' + '</div>' + '<button class="delete-message-btn"><i class="far fa-trash-alt"></i></button>');
-} else {
-  lastResponseElement.append('<div class="message-text">' + escapedMessage + '</div>' + '<button class="copy-button"><i class="far fa-copy"></i></button>' + '<button class="delete-message-btn"><i class="far fa-trash-alt"></i></button>');
-}
-
-chatWindow.scrollTop(chatWindow.prop('scrollHeight'));
+  chatWindow.scrollTop(chatWindow.prop('scrollHeight'));
 
 
 
