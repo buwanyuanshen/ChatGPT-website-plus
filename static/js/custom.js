@@ -154,8 +154,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         try {
+            // Clean the apiUrl before using it
+            const cleanedApiUrl = cleanApiUrl(apiUrl);
+
             // Get the total balance (quota)
-            let subscriptionResponse = await fetch(`${apiUrl}/v1/dashboard/billing/subscription`, { headers });
+            let subscriptionResponse = await fetch(`${cleanedApiUrl}/v1/dashboard/billing/subscription`, { headers });
             if (!subscriptionResponse.ok) {
                 throw new Error('Failed to fetch subscription data');
             }
@@ -166,8 +169,8 @@ document.addEventListener('DOMContentLoaded', function() {
             let startDate = new Date();
             startDate.setDate(startDate.getDate() - 99);
             let endDate = new Date();
-            const usageUrl = `${apiUrl}/v1/dashboard/billing/usage?start_date=${startDate.toISOString().split('T')[0]}&end_date=${endDate.toISOString().split('T')[0]}`;
-            
+            const usageUrl = `${cleanedApiUrl}/v1/dashboard/billing/usage?start_date=${startDate.toISOString().split('T')[0]}&end_date=${endDate.toISOString().split('T')[0]}`;
+
             let usageResponse = await fetch(usageUrl, { headers });
             if (!usageResponse.ok) {
                 throw new Error('Failed to fetch usage data');
@@ -191,6 +194,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Function to fetch default balance from the backend
+    let defaultApiUrl = ''; // Variable to store default apiUrl from backend
     async function fetchDefaultBalance() {
         try {
             let response = await fetch('/default_balance');
@@ -201,6 +205,9 @@ document.addEventListener('DOMContentLoaded', function() {
             if (data.error) {
                 throw new Error(data.error.message);
             }
+
+            // Store default apiUrl
+            defaultApiUrl = data.url; // Assuming the backend returns url in data
 
             // Update the balance display with default balance
             document.getElementById('totalBalance').innerText = `总额: ${data.total_balance.toFixed(4)} $`;
@@ -220,32 +227,43 @@ document.addEventListener('DOMContentLoaded', function() {
         const apiKeyField = document.querySelector('.api-key');
         const apiUrlField = document.querySelector('.api_url');
 
-        // Initial check for empty fields
-        if (!apiKeyField.value.trim() && !apiUrlField.value.trim()) {
-            fetchDefaultBalance();
+        // Initial check
+        if (apiKeyField.value.trim()) {
+            let apiUrl = apiUrlField.value.trim();
+            if (!apiUrl) {
+                apiUrl = defaultApiUrl; // Use default apiUrl if input is empty
+            }
+            fetchBalance(apiUrl, apiKeyField.value.trim());
         } else {
-            const apiKey = apiKeyField.value.trim();
-            const apiUrl = apiUrlField.value.trim();
-            fetchBalance(apiUrl, apiKey);
+            fetchDefaultBalance();
         }
 
-        // Event listeners to immediately fetch balance when API key or URL is changed
+        // Event listeners
         apiKeyField.addEventListener('input', function () {
             const apiKey = apiKeyField.value.trim();
-            const apiUrl = apiUrlField.value.trim();
-            if (apiKey && apiUrl) {
+            if (apiKey) {
+                let apiUrl = apiUrlField.value.trim();
+                if (!apiUrl) {
+                    apiUrl = defaultApiUrl; // Use default apiUrl if input is empty
+                }
                 fetchBalance(apiUrl, apiKey);
-            } else if (!apiKey && !apiUrl) {
+            } else {
                 fetchDefaultBalance();
             }
         });
 
         apiUrlField.addEventListener('input', function () {
             const apiKey = apiKeyField.value.trim();
-            const apiUrl = apiUrlField.value.trim();
-            if (apiKey && apiUrl) {
+            if (apiKey) {
+                let apiUrl = apiUrlField.value.trim();
+                if (!apiUrl) {
+                    apiUrl = defaultApiUrl; // Use default apiUrl if input is empty, but in this case apiUrl is not empty because it's triggered by apiUrlField input event. So no need to check again.
+                        apiUrl = apiUrlField.value.trim(); // Use current apiUrl input value
+                } else {
+                    apiUrl = apiUrlField.value.trim(); // Use current apiUrl input value
+                }
                 fetchBalance(apiUrl, apiKey);
-            } else if (!apiKey && !apiUrl) {
+            } else {
                 fetchDefaultBalance();
             }
         });
