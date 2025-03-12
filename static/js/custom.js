@@ -134,6 +134,18 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
+    // Helper function to clean up API URL
+    function cleanApiUrl(apiUrl) {
+        if (!apiUrl) {
+            return apiUrl;
+        }
+        let cleanedUrl = apiUrl.trim();
+        cleanedUrl = cleanedUrl.replace(/\s/g, ''); // Remove spaces
+        cleanedUrl = cleanedUrl.replace(/\/+$/, ''); // Remove trailing slashes
+        cleanedUrl = cleanedUrl.replace(/\/v1(\/chat\/completions)?$/i, ''); // Remove /v1 or /v1/chat/completions at the end
+        return cleanedUrl;
+    }
+
 
     async function fetchBalance(apiUrl, apiKey) {
         const headers = new Headers({
@@ -248,7 +260,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-
 $(document).ready(function () {
         // Function to detect links
     function containsLink(input) {
@@ -278,7 +289,7 @@ $(document).ready(function () {
             localStorage.setItem('continuousDialogue', false);
         }
     });
-    
+
  // 读取本地存储中的模型列表，并初始化模型选择下拉框
     var savedModels = localStorage.getItem('customModels');
     if (savedModels) {
@@ -370,6 +381,9 @@ $(document).ready(function () {
     function updateTitle() {
         $(".title h2").text($(".settings-common .model option:selected").data('description'));
     }
+
+    // 初始化时更新标题
+    updateTitle();
 });
 
 
@@ -435,7 +449,7 @@ $(document).ready(function() {
   var chatBtn = $('#chatBtn');
   var chatInput = $('#chatInput');
   var chatWindow = $('#chatWindow');
-  
+
   // 全局变量,存储对话信息
   var messages = [];
 
@@ -559,12 +573,12 @@ function addRequestMessage(message) {
   let responseMessageElement = $('<div class="message-bubble"><span class="chat-icon response-icon"></span><div class="message-text response"><span class="loading-icon"><i class="fa fa-spinner fa-pulse fa-2x"></i></span></div></div>');
   chatWindow.append(responseMessageElement);
   chatWindow.scrollTop(chatWindow.prop('scrollHeight'));
-  
+
   // 绑定发送按钮点击事件
   requestMessageElement.find('.send-button').click(function() {
     resendMessage(message);
   });
-  
+
   // 绑定编辑按钮点击事件
   requestMessageElement.find('.edit-button').click(function() {
     editMessage(message);
@@ -581,7 +595,7 @@ function editMessage(message) {
   // 清除该条请求消息和回复消息
   $('.message-bubble').last().prev().remove();
   $('.message-bubble').last().remove();
-  
+
   // 将请求消息粘贴到用户输入框
   chatInput.val(message);
 }
@@ -603,9 +617,10 @@ function resendMessage(message) {
   }
 
   // 判断是否使用自己的 API key
-  const api_url = localStorage.getItem('api_url');
+  let api_url = localStorage.getItem('api_url');
   if (api_url) {
-    data.api_url = api_url;
+      api_url = cleanApiUrl(api_url); // Clean api_url before using
+      data.api_url = api_url;
   }
 
   // 发送信息到后台
@@ -809,7 +824,7 @@ $(document).on('click', '.copy-button', function() {
 
   // 定义一个变量保存ajax请求对象
   let ajaxRequest = null;
-  
+
  // 读取并处理用户输入的多个 API key
 function getRandomApiKey() {
     const apiKeysInput = $(".settings-common .api-key").val();
@@ -844,8 +859,9 @@ let imageSrc = document.getElementById('imagePreview').src;
     }
 
     // 判断是否使用自己的 api key
-    const api_url = localStorage.getItem('api_url');
+    let api_url = localStorage.getItem('api_url');
     if (api_url) {
+        api_url = cleanApiUrl(api_url); // Clean api_url before using
         data.api_url = api_url;
     }
 
@@ -978,13 +994,13 @@ function isMobile() {
   // 设置栏宽度自适应
   let width = $('.function .others').width();
   $('.function .settings .dropdown-menu').css('width', width);
-  
+
   $(window).resize(function() {
     width = $('.function .others').width();
     $('.function .settings .dropdown-menu').css('width', width);
   });
 
-  
+
   // 主题
   function setBgColor(theme){
     $(':root').attr('bg-theme', theme);
@@ -992,7 +1008,7 @@ function isMobile() {
     // 定位在文档外的元素也同步主题色
     $('.settings-common').css('background-color', 'var(--bg-color)');
   }
-  
+
   let theme = localStorage.getItem('theme');
   // 如果之前选择了主题，则将其应用到网站中
   if (theme) {
@@ -1019,7 +1035,7 @@ function isMobile() {
   }
 
   // apiKey输入框事件
-  $(".settings-common .api-key").blur(function() { 
+  $(".settings-common .api-key").blur(function() {
     const apiKey = $(this).val();
     if(apiKey.length!=0){
       localStorage.setItem('apiKey', apiKey);
@@ -1035,7 +1051,7 @@ function isMobile() {
   }
 
   // password输入框事件
-   $(".settings-common .password").blur(function() { 
+   $(".settings-common .password").blur(function() {
     const password = $(this).val();
     if(password.length!=0){
       localStorage.setItem('password', password);
@@ -1046,14 +1062,14 @@ function isMobile() {
 
 
   // 读取apiUrl
-  const api_url = localStorage.getItem('api_url');
+  let api_url = localStorage.getItem('api_url');
   if (api_url) {
     $(".settings-common .api_url").val(api_url);
   }
 
   // apiUrl输入框事件
-  $(".settings-common .api_url").blur(function() { 
-    const api_url = $(this).val();
+  $(".settings-common .api_url").blur(function() {
+    api_url = $(this).val();
     if(api_url.length!=0){
       localStorage.setItem('api_url', api_url);
     }else{
@@ -1165,18 +1181,18 @@ $(".delete a").click(function(){
   }
 
   // temperature输入框事件
-  $(".settings-common .temperature-input").change(function() { 
+  $(".settings-common .temperature-input").change(function() {
     const temperature = $(this).val();
     localStorage.setItem('temperature', temperature);
   })
 
   // temperature滑条事件
-  $(".settings-common .temperature").change(function() { 
+  $(".settings-common .temperature").change(function() {
     const temperature = $(this).val();
     localStorage.setItem('temperature', temperature);
      })
 
-// 读取max_tokens 
+// 读取max_tokens
   const max_tokens  = localStorage.getItem('max_tokens ');
   if (max_tokens) {
     $(".settings-common .max-tokens-input").val(max_tokens );
@@ -1184,13 +1200,13 @@ $(".delete a").click(function(){
   }
 
   // max_tokens 输入框事件
-  $(".settings-common .max-tokens-input").change(function() { 
+  $(".settings-common .max-tokens-input").change(function() {
     const max_tokens  = $(this).val();
     localStorage.setItem('max_tokens ', max_tokens );
       })
 
   // max_tokens 滑条事件
-  $(".settings-common .max-tokens").change(function() { 
+  $(".settings-common .max-tokens").change(function() {
     const max_tokens  = $(this).val();
     localStorage.setItem('max_tokens ', max_tokens );
       })
@@ -1203,7 +1219,7 @@ $(".delete a").click(function(){
     archiveSession = "true";
     localStorage.setItem('archiveSession', archiveSession);
   }
-  
+
   if(archiveSession == "true"){
     $("#chck-1").prop("checked", true);
   }else{
@@ -1223,7 +1239,7 @@ $(".delete a").click(function(){
       localStorage.removeItem("session");
     }
   });
-  
+
   // 加载历史保存会话
   if(archiveSession == "true"){
     const messagesList = JSON.parse(localStorage.getItem("session"));
@@ -1250,7 +1266,7 @@ $(".delete a").click(function(){
     continuousDialogue = "true";
     localStorage.setItem('continuousDialogue', continuousDialogue);
   }
-  
+
   if(continuousDialogue == "true"){
     $("#chck-2").prop("checked", true);
   }else{
