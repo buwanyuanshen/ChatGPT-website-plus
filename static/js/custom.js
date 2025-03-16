@@ -896,7 +896,7 @@ let imageSrc = document.getElementById('imagePreview').src;
     messages.push({"role": "user", "content": message});
 
 
-    if (messages.length > 40) {
+    if (messages.length > 150) {
         addFailMessage("此次对话长度过长，请点击下方删除按钮清除对话内容！");
         // 重新绑定键盘事件
         chatInput.on("keydown", handleEnter);
