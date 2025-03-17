@@ -72,7 +72,7 @@
 9. CF API:[CF API](https://api.gpt6.icu)
 10. CF SHOP:[CF SHOP](https://shop.gpt6.icu)
 11. CF 机场:[CF 机场](https://v2.gpt6.icu)
-12. 可以加入[q群226848325](https://qm.qq.com/cgi-bin/qm/qr?authKey=dBz7wtzXpg5Q1%2F65h4FUudBeLnbOqRzyTsu0t8Jtg0aD%2FWlUv9ilOaGUDxJ8mVJC&k=486Bm9k6xYTodQfqo8DtY2xaK76e4Oh-&noverify=0&group_code=956755074)学习交流！
+12. 可以加入[q群956755074](https://qm.qq.com/cgi-bin/qm/qr?authKey=dBz7wtzXpg5Q1%2F65h4FUudBeLnbOqRzyTsu0t8Jtg0aD%2FWlUv9ilOaGUDxJ8mVJC&k=486Bm9k6xYTodQfqo8DtY2xaK76e4Oh-&noverify=0&group_code=956755074)学习交流！
 13. TG群聊:[TG群聊](https://t.me/fggpt)
 
 ## 其余项目网址
