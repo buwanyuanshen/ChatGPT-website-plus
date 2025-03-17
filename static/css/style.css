@@ -404,7 +404,7 @@ pre{
 }
 
 .title h2{
-  margin-bottom: 20px;
+  margin-bottom: 0px;
   color: #4aa593;
 }
 
@@ -438,7 +438,7 @@ pre{
   padding: 0 15px;
   width: 100%;
   position: absolute;
-  bottom: 0px;
+  bottom: 40px;
 }
 .answer .others{
   display: flex;
