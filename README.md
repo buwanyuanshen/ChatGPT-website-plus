@@ -6,8 +6,7 @@
 
 简易版 `ChatGPT` 网站，拿来即用，适合小白，让你十分钟搭建属于自己的 `ChatGPT` 问答机器人！
 
-本项目是`ChatGPT-website`的改进版本。
-
+本项目是阿牛[ChatGPT-website项目](https://github.com/Aniuyyds/ChatGPT-website)的改进版本。
 欢迎点 Star ! 
 ## 项目效果
 
