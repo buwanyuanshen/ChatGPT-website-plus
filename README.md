@@ -56,6 +56,10 @@
 
 ![image](https://github.com/buwanyuanshen/ChatGPT-website-plus/assets/144007759/eef83fed-dacb-4de1-896f-a5d8f5b92bec)
 
+![image](https://github.com/user-attachments/assets/1aae3729-4919-401c-83e1-4613b17c1670)
+
+![image](https://github.com/user-attachments/assets/347466a0-3b83-484b-b17d-2feb0de1d29e)
+
 # 截止2024.12.07最新ChatGPT免费使用网址，还在更新中！：
 1. Free Chat（后端）:[Free Chat（后端）](https://gpt6.icu)
 2. Free Chat（前端）:[Free Chat（前端）](https://f1.gpt6.icu) 
