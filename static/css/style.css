@@ -608,7 +608,7 @@ input[type="checkbox"]:checked + .check-trail .check-handler::before {
   overflow-y: auto;
   border: none;
   box-shadow:none;
-  margin-left: 10px;
+  margin-left: 0px;
 }
 .answer .ipt textarea:focus{
   border: none !important;
