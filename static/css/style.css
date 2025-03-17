@@ -438,7 +438,14 @@ pre{
   padding: 0 15px;
   width: 100%;
   position: absolute;
-  bottom: 40px;
+  bottom: 10px; /* 电脑端默认 bottom 为 10px */
+}
+
+/* 屏幕宽度小于某个值时，应用以下样式（手机端） */
+@media screen and (max-width: 767px) { /* 767px 是一个常见的手机端断点，你可以根据实际情况调整 */
+  .answer .function{
+    bottom: 38px; /* 手机端 bottom 为 38px */
+  }
 }
 .answer .others{
   display: flex;
