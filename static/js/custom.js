@@ -743,7 +743,7 @@ function addResponseMessage(message) {
       if (urls && urls.length > 0) {
         let imagesHtml = '';
         urls.forEach(url => {
-          imagesHtml += '<img src="' + url + '" style="max-width: 35%; max-height: 35%;" alt="messages"> ';
+          imagesHtml += '<img src="' + url + '" style="max-width: 30%; max-height: 30%;" alt="messages"> ';
         });
         lastResponseElement.append('<div class="message-text">' + escapedMessage + imagesHtml + '</div>' + '<button class="view-button"><i class="fas fa-search"></i></button>' + '<button class="delete-message-btn"><i class="far fa-trash-alt"></i></button>');
       }
@@ -759,7 +759,7 @@ function addResponseMessage(message) {
     if (urls && urls.length > 0) {
       let imagesHtml = '';
       urls.forEach(url => {
-        imagesHtml += '<img src="' + url + '" style="max-width: 35%; max-height: 35%;" alt="messages"> ';
+        imagesHtml += '<img src="' + url + '" style="max-width: 30%; max-height: 30%;" alt="messages"> ';
       });
       lastResponseElement.append('<div class="message-text">' + escapedMessage + imagesHtml + '</div>' + '<button class="view-button"><i class="fas fa-search"></i></button>' + '<button class="delete-message-btn"><i class="far fa-trash-alt"></i></button>');
     }
