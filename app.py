@@ -399,6 +399,18 @@ def chat():
                     "stream": False,
 
             }
+          elif "grok-3-mini" in model:
+            api_url += "/v1/chat/completions"
+            data = {
+                    "messages": json.loads(messages),
+                    "model": model,
+                    "max_tokens": int(max_tokens),
+                    "temperature": float(temperature),
+                    "top_p": 1,
+                    "n": 1,
+                    "stream": False,
+
+            }
         else:
             # 对于其他模型，使用原有 api_url
             api_url += "/v1/chat/completions"
