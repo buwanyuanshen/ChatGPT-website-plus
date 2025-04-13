@@ -421,12 +421,11 @@ def chat():
                     "n": 1,
             }
     elif "grok-2-image" in model:
-            api_url += "/v1/images/generations"
+            api_url += "/v1/chat/completions"
             data = {
-                    "prompt": messages,
+                    "messages": json.loads(messages),
                     "model": model,
                     "n": 1,
-
             }
     elif "deepseek-r" in model:
         api_url += "/v1/chat/completions"
