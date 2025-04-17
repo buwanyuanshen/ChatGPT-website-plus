@@ -375,6 +375,8 @@ def chat():
                     "model": model,
                     "max_tokens": int(max_tokens),
                     "n": 1,
+                                    "stream": True,
+
             }
         elif "o1" in model and "all" not in model:
             api_url += "/v1/chat/completions"
@@ -385,6 +387,8 @@ def chat():
                     "temperature": 1,
                     "top_p": 1,
                     "n": 1,
+                                    "stream": True,
+
             }
         elif "o4" in model and "all" not in model:
             api_url += "/v1/chat/completions"
@@ -395,6 +399,8 @@ def chat():
                     "temperature": 1,
                     "top_p": 1,
                     "n": 1,
+                                    "stream": True,
+
             }
         elif "o3" in model and "all" not in model:
             api_url += "/v1/chat/completions"
@@ -405,6 +411,8 @@ def chat():
                     "temperature": 1,
                     "top_p": 1,
                     "n": 1,
+                                    "stream": True,
+
             }
         else:
             # 对于其他模型，使用原有 api_url
@@ -427,6 +435,8 @@ def chat():
                     "temperature": float(temperature),
                     "top_p": 1,
                     "n": 1,
+                                    "stream": True,
+
             }
     elif "grok-2-image" in model:
             api_url += "/v1/chat/completions"
@@ -443,6 +453,8 @@ def chat():
                     "model": model,
                     "max_tokens": int(max_tokens),
                     "n": 1,
+                                "stream": True,
+
             }
 
     else:
