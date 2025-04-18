@@ -63,7 +63,7 @@ function checkModelAndShowUpload() {
         selectedModel.includes("gemini-2.0") ||
         selectedModel.includes("gemini-2.5") ||
         selectedModel.includes("gemini-exp") ||
-        selectedModel.includes("learnlm-1.5-pro-experimental") ||
+        selectedModel.includes("learnlm") ||
         selectedModel.includes("vision") ||
         selectedModel.includes("o1") ||
         selectedModel.includes("o3") ||
