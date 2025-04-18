@@ -348,7 +348,7 @@ def chat():
             "stream": True,
         }
 
-    elif  "gpt-4" in model or "vision" in model or "glm-4v" in model or "glm-4v-plus" in model or "claude-3" in model or "gemini-1.5" in model or "gemini-exp" in model or "learnlm-1.5-pro-experimental" in model or "o1" in model or "o4" in model or "o3" in model or "gemini-2.0" in model or "gemini-2.5" in model:
+    elif  "gpt-4" in model or "vision" in model or "glm-4v" in model or "glm-4v-plus" in model or "claude-3" in model or "gemini-1.5" in model or "gemini-exp" in model or "learnlm" in model or "o1" in model or "o4" in model or "o3" in model or "gemini-2.0" in model or "gemini-2.5" in model:
         if image_base64:
                 api_url += "/v1/chat/completions"
                 data = {
