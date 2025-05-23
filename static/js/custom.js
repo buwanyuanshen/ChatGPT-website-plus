@@ -59,6 +59,8 @@ function checkModelAndShowUpload() {
         selectedModel.includes("gpt-4") ||
         selectedModel.includes("glm-4v") ||
         selectedModel.includes("claude-3") ||
+        selectedModel.includes("claude-sonnet-4") ||
+        selectedModel.includes("claude-opus-4") ||
         selectedModel.includes("gemini-1.5") ||
         selectedModel.includes("gemini-2.0") ||
         selectedModel.includes("gemini-2.5") ||
