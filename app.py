@@ -328,7 +328,7 @@ def chat():
             "input": messages,
             "model": model,
         }
-    elif "tts-1" in model:
+    elif "tts" in model:
         api_url += "/v1/audio/speech"
         data = {
             "input": messages.replace("user", "").replace("content", "").replace("role", "").replace("assistant", ""),
@@ -594,7 +594,7 @@ def chat():
         return jsonify(embedding)
 
     # 在TTS模型的情况下，返回base64编码的音频数据
-    if "tts-1" in model:
+    if "tts" in model:
         # 解析响应的音频数据并进行base64编码
         audio_data = base64.b64encode(resp.content).decode('utf-8')
         return jsonify(audio_data)
