@@ -69,7 +69,7 @@ def chat():
     global user_text
     messages = request.form.get("prompts", None)
     apiKey = request.form.get("apiKey", None)
-    model = request.form.get("model", "gpt-4o-mini")
+    model = request.form.get("model", "gpt-5")
     temperature = request.form.get("temperature", 0.5)
     max_tokens = request.form.get("max_tokens", 4000)
     password = request.form.get("password", None)
@@ -103,18 +103,18 @@ def chat():
 
     # 如果模型不包含"gpt-4"和"dall-e-3"，使用默认的API_KEYS
     if apiKey is None:
-       if "gpt-4" not in model and "dall" not in model and "claude" not in model and "SparkDesk" not in model and "gemini" not in model and "o1" not in model and "o3" not in model and "grok" not in model and "o4" not in model and "chatgpt" not in model and "embedding" not in model and "moderation" not in model and "glm" not in model and "yi" not in model and "commmand" not in model and "stable" not in model and "deep" not in model and "midjourney" not in model and "douubao" not in model and "qwen" not in model and "co" not in model and "suno" not in model and "abab" not in model and "chat" not in model:
+       if "gpt-4" not in model and "gpt-5" not in model and "dall" not in model and "claude" not in model and "SparkDesk" not in model and "gemini" not in model and "o1" not in model and "o3" not in model and "grok" not in model and "o4" not in model and "chatgpt" not in model and "embedding" not in model and "moderation" not in model and "glm" not in model and "yi" not in model and "commmand" not in model and "stable" not in model and "deep" not in model and "midjourney" not in model and "douubao" not in model and "qwen" not in model and "co" not in model and "suno" not in model and "abab" not in model and "chat" not in model:
             api_keys = app.config.get("API_KEYS", [])
             apiKey = os.environ.get('OPENAI_API_KEY', random.choice(api_keys))
 
     # 如果模型包含"gpt-4"或者dall-e-3，密码错误则返回错误！
     if apiKey is None:
-        if "gpt-4" in model or "dall" in model or "claude" in model or "SparkDesk" in model or "gemini" in model or "o1" in model or "o3" in model or "o4" in model or "grok" in model or "chatgpt" in model or "embedding" in model or "moderation" in model or "glm" in model or "yi" in model or "commmand" in model or "stable" in model or "deep" in model or "midjourney" in model or "douubao" in model or "qwen" in model or "co" in model or "suno" in model or "abab" in model or "chat" in model:
+        if "gpt-4" in model or "gpt-5" in model or "dall" in model or "claude" in model or "SparkDesk" in model or "gemini" in model or "o1" in model or "o3" in model or "o4" in model or "grok" in model or "chatgpt" in model or "embedding" in model or "moderation" in model or "glm" in model or "yi" in model or "commmand" in model or "stable" in model or "deep" in model or "midjourney" in model or "douubao" in model or "qwen" in model or "co" in model or "suno" in model or "abab" in model or "chat" in model:
             if not password:
                 return jsonify({"error": {"message": "请联系群主获取授权码或者输入自己的apikey！！！",
                                           "type": "empty_password_error", "code": ""}})
     if apiKey is None:
-        if "gpt-4" in model or "dall" in model or "claude" in model or "SparkDesk" in model or "gemini" in model or "o1" in model or "o3" in model or "o4" in model or "grok" in model or "chatgpt" in model or "embedding" in model or "moderation" in model or "glm" in model or "yi" in model or "commmand" in model or "stable" in model or "deep" in model or "midjourney" in model or "douubao" in model or "qwen" in model or "co" in model or "suno" in model or "abab" in model or "chat" in model:
+        if "gpt-4" in model or "gpt-5" in model or "dall" in model or "claude" in model or "SparkDesk" in model or "gemini" in model or "o1" in model or "o3" in model or "o4" in model or "grok" in model or "chatgpt" in model or "embedding" in model or "moderation" in model or "glm" in model or "yi" in model or "commmand" in model or "stable" in model or "deep" in model or "midjourney" in model or "douubao" in model or "qwen" in model or "co" in model or "suno" in model or "abab" in model or "chat" in model:
             if password not in ["freegpt", "D2f9A7c5", "3E6bR8s1", "H4j7N9q2", "5T6gY1h9","L8m3W7e2"]:
                 return jsonify({
                     "error": {
@@ -125,7 +125,7 @@ def chat():
                 })
 
     if apiKey is None:
-        if "gpt-4" in model or "dall" in model or "claude" in model or "SparkDesk" in model or "gemini" in model or "o1" in model or "o3" in model or "o4" in model or "grok" in model or "chatgpt" in model or "embedding" in model or "moderation" in model or "glm" in model or "yi" in model or "commmand" in model or "stable" in model or "deep" in model or "midjourney" in model or "douubao" in model or "qwen" in model or "co" in model or "suno" in model or "abab" in model or "chat" in model:
+        if "gpt-4" in model or "gpt-5" in model or "dall" in model or "claude" in model or "SparkDesk" in model or "gemini" in model or "o1" in model or "o3" in model or "o4" in model or "grok" in model or "chatgpt" in model or "embedding" in model or "moderation" in model or "glm" in model or "yi" in model or "commmand" in model or "stable" in model or "deep" in model or "midjourney" in model or "douubao" in model or "qwen" in model or "co" in model or "suno" in model or "abab" in model or "chat" in model:
             if password == "freegpt":
                 api_keys = app.config.get("API_KEYS1", [])
                 apiKey = os.environ.get('OPENAI_API_KEY', random.choice(api_keys))
@@ -348,7 +348,7 @@ def chat():
             "stream": True,
         }
 
-    elif  "gpt-4" in model or "vision" in model or "glm-4v" in model or "glm-4v-plus" in model or "claude-3" in model or "gemini-1.5" in model or "gemini-exp" in model or "learnlm" in model or "o1" in model or "o4" in model or "o3" in model or "gemini-2.0" in model or "gemini-2.5" in model:
+    elif  "gpt-4" in model or "gpt-5" in model or "vision" in model or "glm-4v" in model or "glm-4v-plus" in model or "claude-sonnet" in model or "claude-opus" in model or "claude-3" in model or "claude-4" in model or "gemini-1.5" in model or "gemini-exp" in model or "learnlm" in model or "o1" in model or "o4" in model or "o3" in model or "gemini-2.0" in model or "gemini-2.5" in model:
         if image_base64:
                 api_url += "/v1/chat/completions"
                 data = {
@@ -368,7 +368,7 @@ def chat():
                     "max_tokens": int(max_tokens),
                     "stream": True,
                 }
-        elif "claude-3-7-sonnet-20250219-thinking" in model or "claude-3-7-sonnet-thinking" in model or "claude-3-7-sonnet-thinking-20250219" in model:
+        elif "claude-3" in model or "claude-4" in model or "claude-sonnet" in model or "claude-opus" in model:
             api_url += "/v1/chat/completions"
             data = {
                     "messages": json.loads(messages),
@@ -403,6 +403,18 @@ def chat():
 
             }
         elif "o3" in model and "all" not in model:
+            api_url += "/v1/chat/completions"
+            data = {
+                    "messages": json.loads(messages),
+                    "model": model,
+                    "max_tokens": int(max_tokens),
+                    "temperature": 1,
+                    "top_p": 1,
+                    "n": 1,
+                                    "stream": True,
+
+            }
+                elif "gpt-5" in model and "all" not in model:
             api_url += "/v1/chat/completions"
             data = {
                     "messages": json.loads(messages),
