@@ -328,7 +328,7 @@ def chat():
             "input": messages,
             "model": model,
         }
-    elif "tts" in model or "transcribe" in model:
+    elif "tts" in model:
         api_url += "/v1/audio/speech"
         data = {
             "input": messages.replace("user", "").replace("content", "").replace("role", "").replace("assistant", ""),
