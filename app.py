@@ -64,39 +64,53 @@ def get_models():
         return jsonify({"error": {"message": f"An unexpected error occurred: {str(e)}", "type": "internal_error"}}), 500
         
 @app.route("/default_balance", methods=["GET"])
-def get_default_balance():
-    # 从配置文件中获取默认的 API_KEY 和 API_URL
-    api_keys = app.config.get("API_KEYS1", [])
-    apiKey = os.environ.get('OPENAI_API_KEY', random.choice(api_keys))
-    apiUrl = app.config.get("API_URL1", None)
+def get_balance():
+    # Get parameters from the frontend request, if they exist
+    user_api_key = request.args.get("apiKey", None)
+    user_api_url = request.args.get("api_url", None)
 
-    # 如果默认的 apiKey 或 apiUrl 为空，返回错误信息
-    if not apiKey or not apiUrl:
-        return jsonify({"error": {"message": "未设置默认的 API 密钥或 URL", "type": "config_error", "code": ""}})
+    # --- Start: Intelligent Fallback Logic ---
+    # Use user-provided API Key, or fall back to the server's default if not provided
+    if user_api_key:
+        final_api_key = user_api_key
+    else:
+        api_keys = app.config.get("API_KEYS1", [])
+        if not api_keys:
+             return jsonify({"error": {"message": "未设置默认的 API 密钥", "type": "config_error"}}), 500
+        final_api_key = random.choice(api_keys)
+
+    # Use user-provided API URL, or fall back to the server's default if not provided
+    if user_api_url:
+        final_api_url = user_api_url
+    else:
+        final_api_url = app.config.get("API_URL1", None)
+    # --- End: Intelligent Fallback Logic ---
+
+    # If the final apiKey or apiUrl is missing, return an error
+    if not final_api_key or not final_api_url:
+        return jsonify({"error": {"message": "未配置 API 密钥或 URL", "type": "config_error"}})
 
     headers = {
-        "Authorization": f"Bearer {apiKey}",
+        "Authorization": f"Bearer {final_api_key}",
         "Content-Type": "application/json"
     }
 
-    # 获取余额信息
     try:
-        subscription_url = f"{apiUrl}/v1/dashboard/billing/subscription"
-        subscription_resp = requests.get(subscription_url, headers=headers)
+        # Construct URLs using the final, decided-upon apiUrl
+        subscription_url = f"{final_api_url.rstrip('/')}/v1/dashboard/billing/subscription"
+        subscription_resp = requests.get(subscription_url, headers=headers, timeout=10)
+        subscription_resp.raise_for_status()
         subscription_data = subscription_resp.json()
-
         total = subscription_data.get('hard_limit_usd', 0)
 
-        # 获取使用情况
+        # Get usage information
         start_date = datetime.now() - timedelta(days=99)
         end_date = datetime.now()
-
-        usage_url = f"{apiUrl}/v1/dashboard/billing/usage?start_date={start_date.strftime('%Y-%m-%d')}&end_date={end_date.strftime('%Y-%m-%d')}"
-        usage_resp = requests.get(usage_url, headers=headers)
+        usage_url = f"{final_api_url.rstrip('/')}/v1/dashboard/billing/usage?start_date={start_date.strftime('%Y-%m-%d')}&end_date={end_date.strftime('%Y-%m-%d')}"
+        usage_resp = requests.get(usage_url, headers=headers, timeout=10)
+        usage_resp.raise_for_status()
         usage_data = usage_resp.json()
-
         total_usage = usage_data.get('total_usage', 0) / 100
-
         remaining = total - total_usage
 
         return jsonify({
@@ -104,8 +118,11 @@ def get_default_balance():
             "used_balance": total_usage,
             "remaining_balance": remaining
         })
+    except requests.exceptions.RequestException as e:
+        # Handle API errors gracefully (e.g., wrong key, network issue)
+        return jsonify({"error": {"message": f"API 错误：{str(e)}", "type": "api_error"}})
     except Exception as e:
-        return jsonify({"error": {"message": f"API 错误：{str(e)}", "type": "api_error", "code": ""}})
+        return jsonify({"error": {"message": f"服务器错误：{str(e)}", "type": "server_error"}})
 
 
 @app.route("/chat", methods=["POST"])
