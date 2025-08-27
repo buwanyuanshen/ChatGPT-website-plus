@@ -18,7 +18,51 @@ app.config.from_pyfile('settings.py')
 def index():
     return render_template("chat.html")
 
+@app.route("/models", methods=["GET"])
+def get_models():
+    # Get apiKey and apiUrl from query parameters sent by the frontend
+    apiKey = request.args.get("apiKey", None)
+    api_url = request.args.get("api_url", None)
 
+    # If the frontend did not provide an api_url, use the server's default
+    if not api_url:
+        api_url = app.config.get("API_URL1", None)
+
+    # If the frontend did not provide an apiKey, use one from the server's default pool
+    if not apiKey:
+        api_keys = app.config.get("API_KEYS1", [])
+        if not api_keys:
+             return jsonify({"error": {"message": "Server has no default API key configured.", "type": "config_error"}}), 500
+        apiKey = random.choice(api_keys)
+
+    # Ensure we have the necessary components to make the request
+    if not apiKey or not api_url:
+        return jsonify({"error": {"message": "API key or URL is missing.", "type": "config_error"}}), 400
+
+    headers = {
+        "Authorization": f"Bearer {apiKey}",
+        "Content-Type": "application/json"
+    }
+    
+    # Construct the final URL for the /v1/models endpoint
+    models_url = f"{api_url.rstrip('/')}/v1/models"
+
+    try:
+        resp = requests.get(models_url, headers=headers, timeout=15)
+        resp.raise_for_status()  # Raise an exception for bad status codes (4xx or 5xx)
+        models_data = resp.json()
+        
+        # Sort models by their ID alphabetically
+        if 'data' in models_data and isinstance(models_data['data'], list):
+            models_data['data'] = sorted(models_data['data'], key=lambda x: x.get('id', ''))
+            
+        return jsonify(models_data)
+        
+    except requests.exceptions.RequestException as e:
+        return jsonify({"error": {"message": f"Failed to fetch models from API: {str(e)}", "type": "api_error"}}), 500
+    except Exception as e:
+        return jsonify({"error": {"message": f"An unexpected error occurred: {str(e)}", "type": "internal_error"}}), 500
+        
 @app.route("/default_balance", methods=["GET"])
 def get_default_balance():
     # 从配置文件中获取默认的 API_KEY 和 API_URL
