@@ -285,6 +285,141 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 $(document).ready(function () {
+        // Listen for the 'input' event on the search box for real-time filtering
+    $('.model-search-input').on('input', function() {
+        // Get the search term, trim whitespace, and make it lowercase for case-insensitive search
+        const searchTerm = $(this).val().trim().toLowerCase();
+        const modelSelect = $('.model');
+        let firstVisibleOption = null;
+
+        // Loop through each option in the select dropdown
+        modelSelect.find('option').each(function() {
+            const option = $(this);
+            const modelName = option.text().toLowerCase(); // Get the model name from the option's text
+
+            // Check if the model name includes the search term
+            if (modelName.includes(searchTerm)) {
+                option.show(); // If it matches, make sure the option is visible
+                if (!firstVisibleOption) {
+                    firstVisibleOption = option; // Keep track of the very first matching option
+                }
+            } else {
+                option.hide(); // If it doesn't match, hide the option
+            }
+        });
+
+        // --- Good User Experience Improvement ---
+        // If the currently selected option is now hidden by the filter,
+        // automatically select the first available option in the filtered list.
+        if (modelSelect.find('option:selected').is(':hidden') && firstVisibleOption) {
+             firstVisibleOption.prop('selected', true);
+             // Manually trigger the 'change' event so that the title and other logic updates
+             modelSelect.trigger('change');
+        }
+    });
+
+    // --- END: New code for model searching/filtering ---
+
+    // Function to save the current model list to localStorage
+    function saveModelsToLocalStorage() {
+        var modelsHtml = $(".model").html();
+        // The user mentioned cookies, but the app uses localStorage, so we stick to that.
+        localStorage.setItem('customModels', modelsHtml);
+    }
+    
+    // Function to update the title based on the selected model
+    function updateTitle() {
+        var selectedOption = $(".settings-common .model option:selected");
+        if (selectedOption.length > 0) {
+            $(".title h2").text(selectedOption.data('description'));
+        } else {
+             $(".title h2").text("Free Chat (后端)"); // Fallback title
+        }
+    }
+
+    // Load models from localStorage on page load
+    var savedModels = localStorage.getItem('customModels');
+    if (savedModels) {
+        $(".model").html(savedModels);
+    }
+    
+    // Attach click event handler to the new "Fetch Models" button
+    $('#fetchModelsBtn').on('click', async function() {
+        const btn = $(this);
+        const statusEl = $('#fetchModelsStatus');
+
+        // Get user-provided credentials. Fallback to server defaults if empty.
+        let userApiKey = $('.api-key').val().trim();
+        let userApiUrl = $('.api_url').val().trim();
+        
+        // Disable button and show status
+        btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i>');
+        statusEl.text('Fetching models...').css('color', 'blue');
+
+        // Construct the fetch URL. Our backend will handle empty params.
+        let fetchUrl = '/models';
+        const params = new URLSearchParams();
+        if (userApiKey) {
+            params.append('apiKey', userApiKey);
+        }
+        if (userApiUrl) {
+            // Use the helper function to clean the URL before sending
+            params.append('api_url', cleanApiUrl(userApiUrl));
+        }
+        
+        if (params.toString()) {
+            fetchUrl += '?' + params.toString();
+        }
+
+        try {
+            const response = await fetch(fetchUrl);
+            const data = await response.json();
+
+            if (!response.ok || data.error) {
+                throw new Error(data.error ? data.error.message : `HTTP error! Status: ${response.status}`);
+            }
+
+            if (data.data && Array.isArray(data.data) && data.data.length > 0) {
+                const modelSelect = $('.model');
+                const currentSelectedModel = modelSelect.val(); // Save current selection
+                
+                modelSelect.empty(); // Clear existing options
+
+                // Populate with new models
+                data.data.forEach(model => {
+                    const modelId = model.id;
+                    const newOption = $('<option>', {
+                        value: modelId,
+                        text: modelId,
+                        'data-description': modelId
+                    });
+                    modelSelect.append(newOption);
+                });
+                
+                // Try to re-select the previous model if it still exists
+                if (modelSelect.find(`option[value='${currentSelectedModel}']`).length > 0) {
+                    modelSelect.val(currentSelectedModel);
+                }
+
+                saveModelsToLocalStorage(); // Save the new list
+                updateTitle(); // Update the chat title
+                
+                statusEl.text('Successfully updated!').css('color', 'green');
+            } else {
+                throw new Error('API returned an empty or invalid model list.');
+            }
+
+        } catch (error) {
+            console.error('Failed to fetch models:', error);
+            statusEl.text(`Error: ${error.message}`).css('color', 'red');
+        } finally {
+            // Re-enable button and clear status message after a few seconds
+            setTimeout(() => {
+                btn.prop('disabled', false).html('<i class="fa fa-refresh"></i>');
+                statusEl.text('');
+            }, 3000);
+        }
+    });
         // Function to detect links
     function containsLink(input) {
         const urlRegex = /(https?:\/\/[^\s]+)/g;
