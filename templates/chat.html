@@ -77,6 +77,7 @@
                                     
                                     <div class="settings-common">
                                         <span><i class="fa fa-brain fa-lg" aria-hidden="true"></i>&nbsp; OpenAI Models</span>
+										 <input type="text" id="modelSearchInput" class="form-control ipt-common model-search-input" placeholder="搜索模型">
 					                        <select class="form-control ipt-common model">
                                             					  <option value="gpt-5">gpt-5</option>
 <option value="gpt-5-2025-08-07">gpt-5-2025-08-07</option>
@@ -572,7 +573,13 @@
 <option value="yi-spark">yi-spark</option>
 <option value="yi-vision">yi-vision</option>
                                         </select>
-                                    </div> 
+                                    <div class="input-group-append">
+                                                <button class="btn btn-info btn-sm" id="fetchModelsBtn" title="Fetch the latest model list from the API">
+                                                    <i class="fa fa-refresh" aria-hidden="true"></i>
+                                                </button>
+                                            </div>
+                                        <small id="fetchModelsStatus" class="form-text text-muted" style="margin-left: 5px;"></small>
+                                    </div>
 <div class="settings-common">
     <span><i class="fa fa-plus-square fa-lg" aria-hidden="true"></i>&nbsp; 自定义模型</span>
     <button class="btn btn-secondary btn-sm add-custom-model">添加</button>
