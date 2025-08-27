@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-    // Helper function to clean up API URL
+      // Helper function to clean up API URL (remains unchanged)
     function cleanApiUrl(apiUrl) {
         if (!apiUrl) {
             return apiUrl;
@@ -152,135 +152,67 @@ document.addEventListener('DOMContentLoaded', function() {
         return cleanedUrl;
     }
 
+    // --- NEW: Unified function to update balance information ---
+    async function updateBalanceInfo() {
+        const userApiKey = document.querySelector('.api-key').value.trim();
+        const userApiUrl = document.querySelector('.api_url').value.trim();
 
-    async function fetchBalance(apiUrl, apiKey) {
-        const headers = new Headers({
-            'Authorization': `Bearer ${apiKey}`,
-            'Content-Type': 'application/json'
-        });
+        const totalEl = document.getElementById('totalBalance');
+        const usedEl = document.getElementById('usedBalance');
+        const remainingEl = document.getElementById('remainingBalance');
 
-        try {
-            // Clean the apiUrl before using it
-            const cleanedApiUrl = cleanApiUrl(apiUrl);
+        // Show loading state
+        totalEl.innerText = '总额: 加载中...';
+        usedEl.innerText = '已用: 加载中...';
+        remainingEl.innerText = '剩余: 加载中...';
 
-            // Get the total balance (quota)
-            let subscriptionResponse = await fetch(`${cleanedApiUrl}/v1/dashboard/billing/subscription`, { headers });
-            if (!subscriptionResponse.ok) {
-                throw new Error('Failed to fetch subscription data');
-            }
-            let subscriptionData = await subscriptionResponse.json();
-            let total = subscriptionData.hard_limit_usd;
-
-            // Get the usage information
-            let startDate = new Date();
-            startDate.setDate(startDate.getDate() - 99);
-            let endDate = new Date();
-            const usageUrl = `${cleanedApiUrl}/v1/dashboard/billing/usage?start_date=${startDate.toISOString().split('T')[0]}&end_date=${endDate.toISOString().split('T')[0]}`;
-
-            let usageResponse = await fetch(usageUrl, { headers });
-            if (!usageResponse.ok) {
-                throw new Error('Failed to fetch usage data');
-            }
-            let usageData = await usageResponse.json();
-            let totalUsage = usageData.total_usage / 100;
-
-            let remaining = total - totalUsage;
-
-            // Update the balance display
-            document.getElementById('totalBalance').innerText = `总额: ${total.toFixed(4)} $`;
-            document.getElementById('usedBalance').innerText = `已用: ${totalUsage.toFixed(4)} $`;
-            document.getElementById('remainingBalance').innerText = `剩余: ${remaining.toFixed(4)} $`;
-
-        } catch (error) {
-            console.error('Error fetching balance:', error);
-            document.getElementById('totalBalance').innerText = '总额: 加载失败';
-            document.getElementById('usedBalance').innerText = '已用: 加载失败';
-            document.getElementById('remainingBalance').innerText = '剩余: 加载失败';
+        // Prepare the URL and query parameters to send to our backend
+        const backendUrl = '/default_balance';
+        const params = new URLSearchParams();
+        if (userApiKey) {
+            params.append('apiKey', userApiKey);
         }
-    }
+        if (userApiUrl) {
+            params.append('api_url', cleanApiUrl(userApiUrl));
+        }
+        
+        const finalUrl = `${backendUrl}?${params.toString()}`;
 
-    // Function to fetch default balance from the backend
-    let defaultApiUrl = ''; // Variable to store default apiUrl from backend
-    async function fetchDefaultBalance() {
         try {
-            let response = await fetch('/default_balance');
-            if (!response.ok) {
-                throw new Error('Failed to fetch default balance data');
-            }
-            let data = await response.json();
+            const response = await fetch(finalUrl);
+            const data = await response.json();
+
             if (data.error) {
+                // If the backend returns an error, display it
                 throw new Error(data.error.message);
             }
 
-            // Store default apiUrl
-            defaultApiUrl = data.url; // Assuming the backend returns url in data
-
-            // Update the balance display with default balance
-            document.getElementById('totalBalance').innerText = `总额: ${data.total_balance.toFixed(4)} $`;
-            document.getElementById('usedBalance').innerText = `已用: ${data.used_balance.toFixed(4)} $`;
-            document.getElementById('remainingBalance').innerText = `剩余: ${data.remaining_balance.toFixed(4)} $`;
+            // Update the display with fetched data
+            totalEl.innerText = `总额: ${data.total_balance.toFixed(4)} $`;
+            usedEl.innerText = `已用: ${data.used_balance.toFixed(4)} $`;
+            remainingEl.innerText = `剩余: ${data.remaining_balance.toFixed(4)} $`;
 
         } catch (error) {
-            console.error('Error fetching default balance:', error);
-            document.getElementById('totalBalance').innerText = '总额: 加载失败';
-            document.getElementById('usedBalance').innerText = '已用: 加载失败';
-            document.getElementById('remainingBalance').innerText = '剩余: 加载失败';
+            console.error('Error fetching balance:', error);
+            totalEl.innerText = '总额: 加载失败';
+            usedEl.innerText = '已用: 加载失败';
+            remainingEl.innerText = `剩余: ${error.message}`; // Show error message
         }
     }
 
-    // Function to initialize the listeners
-    function initListeners() {
+    // --- NEW: Simplified event listener setup ---
+    document.addEventListener('DOMContentLoaded', function () {
+        // Get the input fields
         const apiKeyField = document.querySelector('.api-key');
         const apiUrlField = document.querySelector('.api_url');
 
-        // Initial check
-        if (apiKeyField.value.trim()) {
-            let apiUrl = apiUrlField.value.trim();
-            if (!apiUrl) {
-                apiUrl = defaultApiUrl; // Use default apiUrl if input is empty
-            }
-            fetchBalance(apiUrl, apiKeyField.value.trim());
-        } else {
-            fetchDefaultBalance();
-        }
-
-        // Event listeners
-        apiKeyField.addEventListener('input', function () {
-            const apiKey = apiKeyField.value.trim();
-            if (apiKey) {
-                let apiUrl = apiUrlField.value.trim();
-                if (!apiUrl) {
-                    apiUrl = defaultApiUrl; // Use default apiUrl if input is empty
-                }
-                fetchBalance(apiUrl, apiKey);
-            } else {
-                fetchDefaultBalance();
-            }
-        });
-
-        apiUrlField.addEventListener('input', function () {
-            const apiKey = apiKeyField.value.trim();
-            if (apiKey) {
-                let apiUrl = apiUrlField.value.trim();
-                if (!apiUrl) {
-                    apiUrl = defaultApiUrl; // Use default apiUrl if input is empty, but in this case apiUrl is not empty because it's triggered by apiUrlField input event. So no need to check again.
-                        apiUrl = apiUrlField.value.trim(); // Use current apiUrl input value
-                } else {
-                    apiUrl = apiUrlField.value.trim(); // Use current apiUrl input value
-                }
-                fetchBalance(apiUrl, apiKey);
-            } else {
-                fetchDefaultBalance();
-            }
-        });
-    }
-
-    // Ensure DOM is fully loaded before adding event listeners
-    document.addEventListener('DOMContentLoaded', function () {
-        initListeners();
+        // Attach event listeners to update the balance on any input change
+        apiKeyField.addEventListener('input', updateBalanceInfo);
+        apiUrlField.addEventListener('input', updateBalanceInfo);
+        
+        // Initial fetch when the page loads
+        updateBalanceInfo();
     });
-
-
 
 
 
