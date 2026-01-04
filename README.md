@@ -59,28 +59,26 @@
 
 ![image](https://github.com/user-attachments/assets/347466a0-3b83-484b-b17d-2feb0de1d29e)
 
-# 截止2025.09.19最新ChatGPT免费使用网址，还在更新中！：
+# 截止2026.01.04最新ChatGPT免费使用网址，还在更新中！：
 1.  CF网站导航:[CF网站导航](https://dh.gpt7.icu)
 2.  ChatGPT-NextWeb:[ChatGPT-NextWeb](https://next.gpt7.icu)
 3.  Free Chat(后端):[Free Chat(后端)](https://f2.gpt7.icu)
 4.  Free Chat(前端):[Free Chat(前端)](https://f1.gpt7.icu)
 5.  ChatGPT-Lobe:[ChatGPT-Lobe](https://lobe.gp7.icu)
-6.  ChatGPT-OpenWebUI:[ChatGPT-OpenWebUI](https://open.gpt7.icu)
-7.  ChatGPT-MJ:[ChatGPT-MJ](https://mj.gpt7.icu)
-8.  ChatGPT-Libre:[ChatGPT-Libre](https://libre.gpt7.icu)
-9.  Gemini Next Chat:[Gemini Next Chat](https://gemini.gpt7.icu)
-10. Paint-Web:[Paint-Web](https://paint.gpt7.icu)
-11. CF-API:[CF-API](https://api.gpt7.icu)
-12. 跑路机场:[跑路机场](https://v2.gpt7.icu), [跑路机场](https://跑路机场.site)
+6.  ChatGPT-Libre:[ChatGPT-Libre](https://libre.gpt7.icu)
+7.  Gemini Next Chat:[Gemini Next Chat](https://gemini.gpt7.icu)
+8. Paint-Web:[Paint-Web](https://paint.gpt7.icu)
+9. CF-API:[CF-API](https://api.gpt7.icu)
+10. 跑路机场:[跑路机场](https://v2.gpt7.icu), [跑路机场](https://跑路机场.site)
     *   被墙则用: [https://cfjc.gpt7.icu](https://cfjc.gpt7.icu)
     *   或者自行去反代(自己需要有域名)
-13. CF-图床:[CF-图床](https://img.gpt7.icu)
-14. CF-SHOP:[CF-SHOP](https://shop.gpt7.icu)
-15. CF–vps监控:[CF–vps监控](https://vps.gpt7.icu)
-16. CF–网站监控:[CF–网站监控](https://status.gpt7.icu)
-17. AI 小说助手v1.0:[AI 小说助手v1.0](https://novel.gpt7.icu)
-18. CF-TV（密码123456）:[CF-TV（密码123456）](https://tv.gpt7.icu)
-19. CF-MUSIC:[CF-MUSIC](https://music.gpt7.icu)
+11. CF-图床:[CF-图床](https://img.gpt7.icu)
+12. CF-SHOP:[CF-SHOP](https://shop.gpt7.icu)
+13. CF–vps监控:[CF–vps监控](https://vps.gpt7.icu)
+14. CF–网站监控:[CF–网站监控](https://status.gpt7.icu)
+15. AI 小说助手v1.0:[AI 小说助手v1.0](https://novel.gpt7.icu)
+16. CF-TV（密码123456）:[CF-TV（密码123456）](https://tv.gpt7.icu)
+17. CF-MUSIC:[CF-MUSIC](https://music.gpt7.icu)
 ## 其余项目网址
 [ChatGPT-website-forward-vercel(前端)](https://github.com/buwanyuanshen/ChatGPT-website-forward-vercel),一键部署有流式。
 
